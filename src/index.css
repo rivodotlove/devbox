@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+/* devbox themes — minimal palette per theme.
+   Full palettes are expanded incrementally as components need them. */
+
+:root,
+[data-theme="dark"] {
+  --bg: #0f111a;
+  --fg: #d6deeb;
+  --sidebar-bg: #0a0c14;
+  --sidebar-fg: #8b95a7;
+  --accent: #82aaff;
+  --border: #1c1f2b;
+  --muted: #1a1d28;
+}
+
+[data-theme="light"] {
+  --bg: #ffffff;
+  --fg: #1f2328;
+  --sidebar-bg: #f6f8fa;
+  --sidebar-fg: #57606a;
+  --accent: #0969da;
+  --border: #d0d7de;
+  --muted: #eaeef2;
+}
+
+[data-theme="dracula"] {
+  --bg: #282a36;
+  --fg: #f8f8f2;
+  --sidebar-bg: #21222c;
+  --sidebar-fg: #6272a4;
+  --accent: #bd93f9;
+  --border: #44475a;
+  --muted: #343746;
+}
+
+[data-theme="tokyo-night"] {
+  --bg: #1a1b26;
+  --fg: #c0caf5;
+  --sidebar-bg: #16161e;
+  --sidebar-fg: #565f89;
+  --accent: #7aa2f7;
+  --border: #292e42;
+  --muted: #24283b;
+}
+
+[data-theme="catppuccin"] {
+  --bg: #1e1e2e;
+  --fg: #cdd6f4;
+  --sidebar-bg: #181825;
+  --sidebar-fg: #6c7086;
+  --accent: #cba6f7;
+  --border: #313244;
+  --muted: #45475a;
+}
+
+[data-theme="nord"] {
+  --bg: #2e3440;
+  --fg: #d8dee9;
+  --sidebar-bg: #272c36;
+  --sidebar-fg: #4c566a;
+  --accent: #88c0d0;
+  --border: #3b4252;
+  --muted: #434c5e;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: 14px;
+}
