@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
-    "build": "tsc -b && vp build",
+    "build": "tsr generate && tsc -b && vp build",
     "check": "vp check",
     "lint": "vp lint .",
     "typecheck": "tsc -b",
@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.0.0",
+    "@tanstack/router-cli": "^1.167.9",
     "@tanstack/router-devtools": "^1.97.0",
     "@tanstack/router-plugin": "^1.97.0",
     "@types/node": "^24.12.3",

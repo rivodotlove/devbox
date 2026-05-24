@@ -23,4 +23,4 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 - **Routes:** file-based under `src/routes/`. Route tree auto-generated at `src/routeTree.gen.ts` (gitignored).
 - **Themes:** swap via `<html data-theme="...">`. Registered themes live in `src/lib/themes/`.
 - **Fonts:** registered in `src/lib/fonts/`. Only JetBrains Mono is bundled by default; others lazy-loaded.
-- **Deploy:** Cloudflare Pages. `public/_redirects` provides the SPA fallback.
+- **Deploy:** Cloudflare Workers Static Assets via `wrangler deploy`. SPA fallback is configured by `not_found_handling = "single-page-application"` in `wrangler.toml`.
