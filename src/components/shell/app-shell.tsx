@@ -222,6 +222,7 @@ function TabBar() {
             <button
               type="button"
               onClick={(e) => handleClose(e, toolId)}
+              aria-label={`Close ${tool.name} tab`}
               title="Close (or middle-click)"
               className={cn(
                 "mx-1.5 my-auto flex h-5 w-5 items-center justify-center rounded text-(--sidebar-fg) opacity-0 hover:bg-(--muted) hover:text-(--fg) group-hover:opacity-100",
