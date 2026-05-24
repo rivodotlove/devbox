@@ -1,5 +1,5 @@
-import { useState, type ReactNode } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { useState, type MouseEvent, type ReactNode } from "react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
 import {
   Wrench,
@@ -11,10 +11,13 @@ import {
   Settings,
   ChevronDown,
   ChevronRight,
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTabsStore } from "@/stores/use-tabs-store";
 import {
   CATEGORIES,
+  getToolById,
   getToolsByCategory,
   type ToolCategory,
   type ToolDefinition,
@@ -46,11 +49,11 @@ export function AppShell({ children }: AppShellProps) {
           defaultSize={20}
           minSize={12}
           maxSize={40}
-          className="border-r border-[var(--border)] bg-[var(--sidebar-bg)]"
+          className="border-r border-(--border) bg-(--sidebar-bg)"
         >
           <Sidebar />
         </Panel>
-        <PanelResizeHandle className="w-px bg-[var(--border)] data-[resize-handle-state=hover]:bg-[var(--accent)]" />
+        <PanelResizeHandle className="w-px bg-(--border) data-[resize-handle-state=hover]:bg-(--accent)" />
         <Panel defaultSize={80}>
           <div className="flex h-full flex-col">
             <TabBar />
@@ -64,14 +67,14 @@ export function AppShell({ children }: AppShellProps) {
 
 function IconRail() {
   return (
-    <div className="flex w-14 flex-col items-center justify-between border-r border-[var(--border)] bg-[var(--sidebar-bg)] py-2">
+    <div className="flex w-14 flex-col items-center justify-between border-r border-(--border) bg-(--sidebar-bg) py-2">
       <div className="flex flex-col gap-1">
         {ICON_RAIL_TOP.map(({ id, label, Icon }) => (
           <button
             key={id}
             type="button"
             title={label}
-            className="flex h-10 w-10 items-center justify-center rounded text-[var(--sidebar-fg)] hover:bg-[var(--muted)] hover:text-[var(--fg)]"
+            className="flex h-10 w-10 items-center justify-center rounded text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)"
           >
             <Icon size={20} />
           </button>
@@ -83,7 +86,7 @@ function IconRail() {
             key={id}
             type="button"
             title={label}
-            className="flex h-10 w-10 items-center justify-center rounded text-[var(--sidebar-fg)] hover:bg-[var(--muted)] hover:text-[var(--fg)]"
+            className="flex h-10 w-10 items-center justify-center rounded text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)"
           >
             <Icon size={20} />
           </button>
@@ -94,14 +97,13 @@ function IconRail() {
 }
 
 const TOOL_LINK_BASE =
-  "group flex items-center gap-3 px-4 py-1.5 text-[13px] text-[var(--sidebar-fg)] hover:bg-[var(--muted)] hover:text-[var(--fg)]";
-const TOOL_LINK_ACTIVE =
-  "bg-[var(--muted)] text-[var(--fg)] border-l-2 border-[var(--accent)] pl-[14px]";
+  "group flex items-center gap-3 px-4 py-1.5 text-[length:13px] text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)";
+const TOOL_LINK_ACTIVE = "bg-(--muted) text-(--fg) border-l-2 border-(--accent) pl-[14px]";
 
 function Sidebar() {
   return (
     <div className="flex h-full flex-col overflow-y-auto py-3">
-      <div className="px-4 pb-3 text-xs font-semibold uppercase tracking-wider text-[var(--sidebar-fg)]">
+      <div className="px-4 pb-3 text-xs font-semibold uppercase tracking-wider text-(--sidebar-fg)">
         Tools
       </div>
       {CATEGORIES.map((category) => {
@@ -129,7 +131,7 @@ function CategorySection({ category, tools }: { category: ToolCategory; tools: T
       <button
         type="button"
         onClick={() => setIsOpen((v) => !v)}
-        className="flex w-full items-center gap-1 px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider text-[var(--sidebar-fg)]/70 hover:text-[var(--fg)]"
+        className="flex w-full items-center gap-1 px-3 py-1.5 text-[length:10px] font-medium uppercase tracking-wider text-(--sidebar-fg)/70 hover:text-(--fg)"
       >
         <Chevron size={12} />
         <span>{category.label}</span>
@@ -149,7 +151,7 @@ function CategorySection({ category, tools }: { category: ToolCategory; tools: T
                     className: cn(TOOL_LINK_BASE, TOOL_LINK_ACTIVE),
                   }}
                 >
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[var(--accent)]/15 text-[var(--accent)]">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-(--accent)/15 text-(--accent)">
                     <Icon size={14} />
                   </span>
                   <span className="truncate">{tool.name}</span>
@@ -164,9 +166,73 @@ function CategorySection({ category, tools }: { category: ToolCategory; tools: T
 }
 
 function TabBar() {
+  const tabs = useTabsStore((s) => s.tabs);
+  const close = useTabsStore((s) => s.close);
+  const activeToolId = useActiveToolId();
+  const navigate = useNavigate();
+
+  const handleClose = (e: MouseEvent, toolId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const next = close(toolId);
+    if (toolId !== activeToolId) return;
+    if (next) {
+      void navigate({ to: "/tool/$toolId", params: { toolId: next } });
+    } else {
+      void navigate({ to: "/" });
+    }
+  };
+
+  if (tabs.length === 0) {
+    return <div className="h-11 border-b border-(--border) bg-(--sidebar-bg)" />;
+  }
+
   return (
-    <div className="flex h-9 items-center border-b border-[var(--border)] bg-[var(--sidebar-bg)] px-2 text-xs text-[var(--sidebar-fg)]">
-      No tabs open
+    <div className="flex h-12 items-stretch overflow-x-auto border-b border-(--border) bg-(--sidebar-bg)">
+      {tabs.map((toolId) => {
+        const tool = getToolById(toolId);
+        if (!tool) return null;
+        const Icon = tool.icon;
+        const isActive = toolId === activeToolId;
+        return (
+          <div
+            key={toolId}
+            className={cn(
+              "group relative flex h-full shrink-0 items-stretch border-r border-(--border)",
+              isActive ? "bg-(--bg)" : "hover:bg-(--muted)/50",
+            )}
+          >
+            {isActive && (
+              <span className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-(--accent)" />
+            )}
+            <Link
+              to="/tool/$toolId"
+              params={{ toolId }}
+              onAuxClick={(e) => {
+                if (e.button === 1) handleClose(e, toolId);
+              }}
+              className={cn(
+                "flex h-full items-center gap-2 pl-3 pr-1 text-[13px]",
+                isActive ? "text-(--fg)" : "text-(--sidebar-fg)",
+              )}
+            >
+              <Icon size={13} />
+              <span className="max-w-40 truncate">{tool.name}</span>
+            </Link>
+            <button
+              type="button"
+              onClick={(e) => handleClose(e, toolId)}
+              title="Close (or middle-click)"
+              className={cn(
+                "mx-1.5 my-auto flex h-5 w-5 items-center justify-center rounded text-(--sidebar-fg) opacity-0 hover:bg-(--muted) hover:text-(--fg) group-hover:opacity-100",
+                isActive && "opacity-70",
+              )}
+            >
+              <X size={12} />
+            </button>
+          </div>
+        );
+      })}
     </div>
   );
 }
