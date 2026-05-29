@@ -1,9 +1,16 @@
-import { useState, type MouseEvent, type ReactNode } from "react";
+import { useState, useCallback, useRef, type MouseEvent, type ReactNode } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
-import { Keyboard, Info, Settings, ChevronDown, ChevronRight, X } from "lucide-react";
+import {
+  PanelGroup,
+  Panel,
+  PanelResizeHandle,
+  type ImperativePanelHandle,
+} from "react-resizable-panels";
+import { useHotkeys } from "react-hotkeys-hook";
+import { Keyboard, Info, Settings, ChevronDown, ChevronRight, X, PanelLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTabsStore } from "@/stores/use-tabs-store";
+import { useShellStore } from "@/stores/use-shell-store";
 import {
   CATEGORIES,
   getToolById,
@@ -11,6 +18,9 @@ import {
   type ToolCategory,
   type ToolDefinition,
 } from "@/tools/registry";
+import { HOTKEYS } from "@/lib/hotkeys";
+import { CommandPalette } from "./command-palette";
+import { ShortcutsCheatsheet } from "./shortcuts-cheatsheet";
 
 interface AppShellProps {
   children: ReactNode;
@@ -23,46 +33,107 @@ const STATUS_BAR_ITEMS = [
 ];
 
 export function AppShell({ children }: AppShellProps) {
+  const {
+    paletteOpen,
+    cheatsheetOpen,
+    sidebarCollapsed,
+    openPalette,
+    closePalette,
+    openCheatsheet,
+    closeCheatsheet,
+    setSidebarCollapsed,
+  } = useShellStore();
+
+  const sidebarRef = useRef<ImperativePanelHandle>(null);
+
+  const toggleSidebar = useCallback(() => {
+    const panel = sidebarRef.current;
+    if (!panel) return;
+    if (panel.isCollapsed()) {
+      panel.expand();
+    } else {
+      panel.collapse();
+    }
+  }, []);
+
+  const tabs = useTabsStore((s) => s.tabs);
+  const navigate = useNavigate();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const activeMatch = /^\/tool\/([^/]+)\/?$/.exec(pathname);
+  const activeToolId = activeMatch?.[1];
+
+  useHotkeys(
+    HOTKEYS.palette.command,
+    (e) => {
+      e.preventDefault();
+      openPalette();
+    },
+    { enableOnFormTags: false },
+  );
+  useHotkeys(HOTKEYS.sidebar.command, (e) => {
+    e.preventDefault();
+    toggleSidebar();
+  });
+  useHotkeys(HOTKEYS.cheatsheet.command, () => openCheatsheet());
+  useHotkeys(HOTKEYS.closeTab.command, (e) => {
+    e.preventDefault();
+    if (!activeToolId) return;
+    const next = useTabsStore.getState().close(activeToolId);
+    if (next) {
+      void navigate({ to: "/tool/$toolId", params: { toolId: next } });
+    } else {
+      void navigate({ to: "/" });
+    }
+  });
+  useHotkeys(HOTKEYS.nextTab.command, (e) => {
+    e.preventDefault();
+    if (!tabs.length) return;
+    const idx = activeToolId ? tabs.indexOf(activeToolId) : -1;
+    const next = tabs[(idx + 1) % tabs.length];
+    if (next) void navigate({ to: "/tool/$toolId", params: { toolId: next } });
+  });
+  useHotkeys(HOTKEYS.prevTab.command, (e) => {
+    e.preventDefault();
+    if (!tabs.length) return;
+    const idx = activeToolId ? tabs.indexOf(activeToolId) : 0;
+    const prev = tabs[(idx - 1 + tabs.length) % tabs.length];
+    if (prev) void navigate({ to: "/tool/$toolId", params: { toolId: prev } });
+  });
+
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden">
       <div className="flex flex-1 overflow-hidden">
         <PanelGroup direction="horizontal" autoSaveId="devbox:shell-h">
           <Panel
+            ref={sidebarRef}
             defaultSize={20}
             minSize={12}
             maxSize={40}
+            collapsible
+            collapsedSize={0}
+            onCollapse={() => setSidebarCollapsed(true)}
+            onExpand={() => setSidebarCollapsed(false)}
             className="border-r border-(--border) bg-(--sidebar-bg)"
           >
             <Sidebar />
           </Panel>
-          <PanelResizeHandle className="w-px bg-(--border) data-[resize-handle-state=hover]:bg-(--accent)" />
+          <PanelResizeHandle
+            className={cn(
+              "w-px bg-(--border) data-[resize-handle-state=hover]:bg-(--accent)",
+              sidebarCollapsed && "hidden",
+            )}
+          />
           <Panel defaultSize={80}>
             <div className="flex h-full flex-col">
-              <TabBar />
+              <TabBar sidebarCollapsed={sidebarCollapsed} onToggleSidebar={toggleSidebar} />
               <div className="flex-1 overflow-auto">{children}</div>
             </div>
           </Panel>
         </PanelGroup>
       </div>
-      <StatusBar />
-    </div>
-  );
-}
-
-function StatusBar() {
-  return (
-    <div className="flex h-6 shrink-0 items-center justify-end gap-0.5 border-t border-(--border) bg-(--sidebar-bg) px-1.5">
-      {STATUS_BAR_ITEMS.map(({ id, label, Icon }) => (
-        <button
-          key={id}
-          type="button"
-          title={label}
-          aria-label={label}
-          className="flex h-5 w-5 items-center justify-center rounded text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)"
-        >
-          <Icon size={12} />
-        </button>
-      ))}
+      <StatusBar onShortcuts={openCheatsheet} />
+      <CommandPalette open={paletteOpen} onClose={closePalette} />
+      <ShortcutsCheatsheet open={cheatsheetOpen} onClose={closeCheatsheet} />
     </div>
   );
 }
@@ -136,7 +207,13 @@ function CategorySection({ category, tools }: { category: ToolCategory; tools: T
   );
 }
 
-function TabBar() {
+function TabBar({
+  sidebarCollapsed,
+  onToggleSidebar,
+}: {
+  sidebarCollapsed: boolean;
+  onToggleSidebar: () => void;
+}) {
   const tabs = useTabsStore((s) => s.tabs);
   const close = useTabsStore((s) => s.close);
   const activeToolId = useActiveToolId();
@@ -154,57 +231,86 @@ function TabBar() {
     }
   };
 
-  if (tabs.length === 0) {
-    return <div className="h-11 border-b border-(--border) bg-(--sidebar-bg)" />;
-  }
-
   return (
-    <div className="flex h-12 items-stretch overflow-x-auto border-b border-(--border) bg-(--sidebar-bg)">
-      {tabs.map((toolId) => {
-        const tool = getToolById(toolId);
-        if (!tool) return null;
-        const Icon = tool.icon;
-        const isActive = toolId === activeToolId;
-        return (
-          <div
-            key={toolId}
-            className={cn(
-              "group relative flex h-full shrink-0 items-stretch border-r border-(--border)",
-              isActive ? "bg-(--bg)" : "hover:bg-(--muted)/50",
-            )}
-          >
-            {isActive && (
-              <span className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-(--accent)" />
-            )}
-            <Link
-              to="/tool/$toolId"
-              params={{ toolId }}
-              onAuxClick={(e) => {
-                if (e.button === 1) handleClose(e, toolId);
-              }}
-              className={cn(
-                "flex h-full items-center gap-2 pl-3 pr-1 text-[13px]",
-                isActive ? "text-(--fg)" : "text-(--sidebar-fg)",
-              )}
-            >
-              <Icon size={13} />
-              <span className="max-w-40 truncate">{tool.name}</span>
-            </Link>
-            <button
-              type="button"
-              onClick={(e) => handleClose(e, toolId)}
-              aria-label={`Close ${tool.name} tab`}
-              title="Close (or middle-click)"
-              className={cn(
-                "mx-1.5 my-auto flex h-5 w-5 items-center justify-center rounded text-(--sidebar-fg) opacity-0 hover:bg-(--muted) hover:text-(--fg) group-hover:opacity-100",
-                isActive && "opacity-70",
-              )}
-            >
-              <X size={12} />
-            </button>
-          </div>
-        );
-      })}
+    <div className="flex h-11 shrink-0 items-stretch border-b border-(--border) bg-(--sidebar-bg)">
+      {sidebarCollapsed && (
+        <button
+          type="button"
+          title="Show sidebar (⌘B)"
+          onClick={onToggleSidebar}
+          className="flex w-10 shrink-0 items-center justify-center border-r border-(--border) text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)"
+        >
+          <PanelLeft size={14} />
+        </button>
+      )}
+      {tabs.length === 0 ? null : (
+        <div className="flex flex-1 items-stretch overflow-x-auto">
+          {tabs.map((toolId) => {
+            const tool = getToolById(toolId);
+            if (!tool) return null;
+            const Icon = tool.icon;
+            const isActive = toolId === activeToolId;
+            return (
+              <div
+                key={toolId}
+                className={cn(
+                  "group relative flex h-full shrink-0 items-stretch border-r border-(--border)",
+                  isActive ? "bg-(--bg)" : "hover:bg-(--muted)/50",
+                )}
+              >
+                {isActive && (
+                  <span className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-(--accent)" />
+                )}
+                <Link
+                  to="/tool/$toolId"
+                  params={{ toolId }}
+                  onAuxClick={(e) => {
+                    if (e.button === 1) handleClose(e, toolId);
+                  }}
+                  className={cn(
+                    "flex h-full items-center gap-2 pl-3 pr-1 text-[13px]",
+                    isActive ? "text-(--fg)" : "text-(--sidebar-fg)",
+                  )}
+                >
+                  <Icon size={13} />
+                  <span className="max-w-40 truncate">{tool.name}</span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={(e) => handleClose(e, toolId)}
+                  aria-label={`Close ${tool.name} tab`}
+                  title="Close (or middle-click)"
+                  className={cn(
+                    "mx-1.5 my-auto flex h-5 w-5 items-center justify-center rounded text-(--sidebar-fg) opacity-0 hover:bg-(--muted) hover:text-(--fg) group-hover:opacity-100",
+                    isActive && "opacity-70",
+                  )}
+                >
+                  <X size={12} />
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function StatusBar({ onShortcuts }: { onShortcuts: () => void }) {
+  return (
+    <div className="flex h-6 shrink-0 items-center justify-end gap-0.5 border-t border-(--border) bg-(--sidebar-bg) px-1.5">
+      {STATUS_BAR_ITEMS.map(({ id, label, Icon }) => (
+        <button
+          key={id}
+          type="button"
+          title={label}
+          aria-label={label}
+          onClick={id === "shortcuts" ? onShortcuts : undefined}
+          className="flex h-5 w-5 items-center justify-center rounded text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)"
+        >
+          <Icon size={12} />
+        </button>
+      ))}
     </div>
   );
 }
