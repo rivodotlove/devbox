@@ -26,6 +26,7 @@ export const useShellStore = create<ShellState>()(
     }),
     {
       name: "devbox:shell",
+      // only persist sidebarCollapsed — palette/cheatsheet open state is transient
       partialize: (state) => ({ sidebarCollapsed: state.sidebarCollapsed }),
     },
   ),

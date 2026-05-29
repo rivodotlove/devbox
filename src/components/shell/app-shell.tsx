@@ -236,7 +236,7 @@ function TabBar({
       {sidebarCollapsed && (
         <button
           type="button"
-          title="Show sidebar (Mod+B)"
+          title="Show sidebar (⌘B)"
           onClick={onToggleSidebar}
           className="flex w-10 shrink-0 items-center justify-center border-r border-(--border) text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)"
         >
@@ -297,10 +297,6 @@ function TabBar({
 }
 
 function StatusBar({ onShortcuts }: { onShortcuts: () => void }) {
-  const handlers: Record<string, () => void> = {
-    shortcuts: onShortcuts,
-  };
-
   return (
     <div className="flex h-6 shrink-0 items-center justify-end gap-0.5 border-t border-(--border) bg-(--sidebar-bg) px-1.5">
       {STATUS_BAR_ITEMS.map(({ id, label, Icon }) => (
@@ -309,7 +305,7 @@ function StatusBar({ onShortcuts }: { onShortcuts: () => void }) {
           type="button"
           title={label}
           aria-label={label}
-          onClick={handlers[id]}
+          onClick={id === "shortcuts" ? onShortcuts : undefined}
           className="flex h-5 w-5 items-center justify-center rounded text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)"
         >
           <Icon size={12} />

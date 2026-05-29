@@ -1,5 +1,5 @@
-import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { useHotkeys } from "react-hotkeys-hook";
 import { Command } from "cmdk";
 import { Search } from "lucide-react";
 import { CATEGORIES, TOOLS } from "@/tools/registry";
@@ -14,14 +14,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
   const navigate = useNavigate();
   const openTab = useTabsStore((s) => s.open);
 
-  useEffect(() => {
-    if (!open) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [open, onClose]);
+  useHotkeys("escape", onClose, { enabled: open });
 
   if (!open) return null;
 
@@ -66,7 +59,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                         key={tool.id}
                         value={`${tool.name} ${tool.description}`}
                         onSelect={() => handleSelect(tool.id)}
-                        className="flex cursor-pointer items-center gap-3 px-3 py-2 text-sm text-(--fg) data-[selected=true]:bg-(--muted)"
+                        className="flex cursor-pointer items-center gap-3 px-3 py-2 text-sm text-(--fg) data-[selected]:bg-(--muted)"
                       >
                         <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-(--accent)/15 text-(--accent)">
                           <Icon size={12} />
