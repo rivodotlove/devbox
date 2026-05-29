@@ -1,37 +1,32 @@
-import { useHotkeys } from "react-hotkeys-hook";
-import { HOTKEYS } from "@/lib/hotkeys";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+
+const SHORTCUTS = [
+  { keys: ["⌘K", "⌘⇧P"], label: "Open command palette" },
+  { keys: ["⌘B"], label: "Toggle sidebar" },
+  { keys: ["⌘⌥W"], label: "Close active tab" },
+  { keys: ["⌘⌥→"], label: "Next tab" },
+  { keys: ["⌘⌥←"], label: "Previous tab" },
+  { keys: ["?"], label: "Show keyboard shortcuts" },
+  { keys: ["Esc"], label: "Close palette / dialog" },
+];
 
 interface ShortcutsCheatsheetProps {
   open: boolean;
-  onClose: () => void;
+  onOpenChange: (open: boolean) => void;
 }
 
-const SHORTCUTS = Object.values(HOTKEYS);
-
-export function ShortcutsCheatsheet({ open, onClose }: ShortcutsCheatsheetProps) {
-  useHotkeys("escape", onClose, { enabled: open });
-
-  if (!open) return null;
+export function ShortcutsCheatsheet(props: Readonly<ShortcutsCheatsheetProps>) {
+  const { open, onOpenChange } = props;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" onClick={onClose}>
-      <div
-        className="w-full max-w-md overflow-hidden rounded-lg border border-(--border) bg-(--bg) shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between border-b border-(--border) px-4 py-3">
-          <span className="text-sm font-medium text-(--fg)">Keyboard Shortcuts</span>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-xs text-(--sidebar-fg) hover:text-(--fg)"
-          >
-            Esc
-          </button>
-        </div>
-        <ul className="py-2">
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Keyboard Shortcuts</DialogTitle>
+        </DialogHeader>
+        <ul className="py-1">
           {SHORTCUTS.map(({ label, keys }) => (
-            <li key={label} className="flex items-center justify-between px-4 py-2">
+            <li key={label} className="flex items-center justify-between py-2">
               <span className="text-sm text-(--sidebar-fg)">{label}</span>
               <span className="flex gap-1">
                 {keys.map((k) => (
@@ -46,7 +41,7 @@ export function ShortcutsCheatsheet({ open, onClose }: ShortcutsCheatsheetProps)
             </li>
           ))}
         </ul>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
