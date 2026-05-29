@@ -1,18 +1,7 @@
 import { useState, type MouseEvent, type ReactNode } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
-import {
-  Wrench,
-  Search,
-  Star,
-  Layers,
-  Keyboard,
-  Info,
-  Settings,
-  ChevronDown,
-  ChevronRight,
-  X,
-} from "lucide-react";
+import { Keyboard, Info, Settings, ChevronDown, ChevronRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTabsStore } from "@/stores/use-tabs-store";
 import {
@@ -27,14 +16,7 @@ interface AppShellProps {
   children: ReactNode;
 }
 
-const ICON_RAIL_TOP = [
-  { id: "tools", label: "Tools", Icon: Wrench },
-  { id: "search", label: "Search", Icon: Search },
-  { id: "favourites", label: "Favourites", Icon: Star },
-  { id: "open-tabs", label: "Open Tabs", Icon: Layers },
-];
-
-const ICON_RAIL_BOTTOM = [
+const STATUS_BAR_ITEMS = [
   { id: "shortcuts", label: "Shortcuts", Icon: Keyboard },
   { id: "info", label: "Info", Icon: Info },
   { id: "settings", label: "Settings", Icon: Settings },
@@ -42,56 +24,45 @@ const ICON_RAIL_BOTTOM = [
 
 export function AppShell({ children }: AppShellProps) {
   return (
-    <div className="flex h-screen w-screen overflow-hidden">
-      <IconRail />
-      <PanelGroup direction="horizontal" autoSaveId="devbox:shell-h">
-        <Panel
-          defaultSize={20}
-          minSize={12}
-          maxSize={40}
-          className="border-r border-(--border) bg-(--sidebar-bg)"
-        >
-          <Sidebar />
-        </Panel>
-        <PanelResizeHandle className="w-px bg-(--border) data-[resize-handle-state=hover]:bg-(--accent)" />
-        <Panel defaultSize={80}>
-          <div className="flex h-full flex-col">
-            <TabBar />
-            <div className="flex-1 overflow-auto">{children}</div>
-          </div>
-        </Panel>
-      </PanelGroup>
+    <div className="flex h-screen w-screen flex-col overflow-hidden">
+      <div className="flex flex-1 overflow-hidden">
+        <PanelGroup direction="horizontal" autoSaveId="devbox:shell-h">
+          <Panel
+            defaultSize={20}
+            minSize={12}
+            maxSize={40}
+            className="border-r border-(--border) bg-(--sidebar-bg)"
+          >
+            <Sidebar />
+          </Panel>
+          <PanelResizeHandle className="w-px bg-(--border) data-[resize-handle-state=hover]:bg-(--accent)" />
+          <Panel defaultSize={80}>
+            <div className="flex h-full flex-col">
+              <TabBar />
+              <div className="flex-1 overflow-auto">{children}</div>
+            </div>
+          </Panel>
+        </PanelGroup>
+      </div>
+      <StatusBar />
     </div>
   );
 }
 
-function IconRail() {
+function StatusBar() {
   return (
-    <div className="flex w-14 flex-col items-center justify-between border-r border-(--border) bg-(--sidebar-bg) py-2">
-      <div className="flex flex-col gap-1">
-        {ICON_RAIL_TOP.map(({ id, label, Icon }) => (
-          <button
-            key={id}
-            type="button"
-            title={label}
-            className="flex h-10 w-10 items-center justify-center rounded text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)"
-          >
-            <Icon size={20} />
-          </button>
-        ))}
-      </div>
-      <div className="flex flex-col gap-1">
-        {ICON_RAIL_BOTTOM.map(({ id, label, Icon }) => (
-          <button
-            key={id}
-            type="button"
-            title={label}
-            className="flex h-10 w-10 items-center justify-center rounded text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)"
-          >
-            <Icon size={20} />
-          </button>
-        ))}
-      </div>
+    <div className="flex h-6 shrink-0 items-center justify-end gap-0.5 border-t border-(--border) bg-(--sidebar-bg) px-1.5">
+      {STATUS_BAR_ITEMS.map(({ id, label, Icon }) => (
+        <button
+          key={id}
+          type="button"
+          title={label}
+          aria-label={label}
+          className="flex h-5 w-5 items-center justify-center rounded text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)"
+        >
+          <Icon size={12} />
+        </button>
+      ))}
     </div>
   );
 }
