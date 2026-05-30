@@ -11,6 +11,13 @@ import {
   Type,
   type LucideIcon,
 } from "lucide-react";
+import type { ComponentType } from "react";
+
+/**
+ * Public contract a tool module's barrel must satisfy: a default-exported
+ * React entry component. Consumed lazily through ToolDefinition.loader.
+ */
+export type ToolModule = { default: ComponentType };
 
 export type ToolCategoryId =
   | "encoding"
@@ -40,6 +47,11 @@ export interface ToolDefinition {
   category: ToolCategoryId;
   icon: LucideIcon;
   description: string;
+  /**
+   * Lazy import of the module barrel. Absent until the tool is implemented;
+   * the tool route renders a placeholder while undefined.
+   */
+  loader?: () => Promise<ToolModule>;
 }
 
 export const TOOLS: ToolDefinition[] = [

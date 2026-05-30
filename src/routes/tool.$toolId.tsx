@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Suspense, lazy, useEffect, useMemo } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useTabsStore } from "@/app/stores/use-tabs-store";
 import { CATEGORIES, getToolById } from "@/shared/kernel/registry";
@@ -16,6 +16,9 @@ function ToolRoute() {
     if (tool) open(toolId);
   }, [toolId, tool, open]);
 
+  const loader = tool?.loader;
+  const LazyTool = useMemo(() => (loader ? lazy(loader) : null), [loader]);
+
   if (!tool) {
     return (
       <div className="flex h-full w-full items-center justify-center">
@@ -32,6 +35,14 @@ function ToolRoute() {
     );
   }
 
+  if (LazyTool) {
+    return (
+      <Suspense fallback={<ToolLoading />}>
+        <LazyTool />
+      </Suspense>
+    );
+  }
+
   const Icon = tool.icon;
   const category = CATEGORIES.find((c) => c.id === tool.category);
 
@@ -44,6 +55,14 @@ function ToolRoute() {
         <p className="mt-4 max-w-sm text-sm">{tool.description}</p>
         <p className="mt-6 text-xs italic">Not implemented yet.</p>
       </div>
+    </div>
+  );
+}
+
+function ToolLoading() {
+  return (
+    <div className="flex h-full w-full items-center justify-center text-(--sidebar-fg)">
+      <p className="text-sm">Loading…</p>
     </div>
   );
 }

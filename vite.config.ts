@@ -10,7 +10,56 @@ export default defineConfig({
     "*": "vp check --fix",
   },
   fmt: {},
-  lint: { options: { typeAware: true, typeCheck: true } },
+  lint: {
+    options: { typeAware: true, typeCheck: true },
+    // DDD-lite boundary rules. Modules are reachable only via their barrel.
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "@/modules/*/domain",
+                "@/modules/*/domain/*",
+                "@/modules/*/ui",
+                "@/modules/*/ui/*",
+              ],
+              message: "Import a tool only through its barrel: @/modules/<tool>.",
+            },
+          ],
+        },
+      ],
+    },
+    // domain/ must stay framework- and IO-free.
+    overrides: [
+      {
+        files: ["**/domain/**"],
+        rules: {
+          "no-restricted-imports": [
+            "error",
+            {
+              patterns: [
+                {
+                  group: [
+                    "react",
+                    "react-dom",
+                    "@/app",
+                    "@/app/*",
+                    "@/shared/lib/storage",
+                    "@/shared/lib/storage/*",
+                    "@/modules/*",
+                  ],
+                  message:
+                    "domain/ must stay pure: no React, app state, storage, or other modules.",
+                },
+              ],
+            },
+          ],
+        },
+      },
+    ],
+  },
   plugins: [tanstackRouter({ target: "react", autoCodeSplitting: true }), react(), tailwindcss()],
   resolve: {
     alias: {
