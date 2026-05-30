@@ -1,5 +1,5 @@
 import { useHotkeys } from "react-hotkeys-hook";
-import { HOTKEYS } from "@/lib/hotkeys";
+import { HOTKEYS } from "@/shared/lib/hotkeys";
 
 interface ShortcutsCheatsheetProps {
   open: boolean;

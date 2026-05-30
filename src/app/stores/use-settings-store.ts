@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { DEFAULT_FONT, type FontId } from "@/lib/fonts";
-import { DEFAULT_THEME, type ThemeId } from "@/lib/themes";
+import { DEFAULT_FONT, type FontId } from "@/shared/lib/fonts";
+import { DEFAULT_THEME, type ThemeId } from "@/shared/lib/themes";
 
 interface SettingsState {
   theme: ThemeId;

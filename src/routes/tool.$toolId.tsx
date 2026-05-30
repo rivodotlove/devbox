@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useTabsStore } from "@/stores/use-tabs-store";
-import { CATEGORIES, getToolById } from "@/tools/registry";
+import { useTabsStore } from "@/app/stores/use-tabs-store";
+import { CATEGORIES, getToolById } from "@/shared/kernel/registry";
 
 export const Route = createFileRoute("/tool/$toolId")({
   component: ToolRoute,
