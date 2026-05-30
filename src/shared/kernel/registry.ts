@@ -61,6 +61,7 @@ export const TOOLS: ToolDefinition[] = [
     category: "encoding",
     icon: Binary,
     description: "Encode and decode Base64 strings.",
+    loader: () => import("@/modules/base64"),
   },
   {
     id: "url",
