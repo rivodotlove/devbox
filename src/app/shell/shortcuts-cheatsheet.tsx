@@ -37,7 +37,7 @@ export function ShortcutsCheatsheet({ open, onClose }: ShortcutsCheatsheetProps)
                 {keys.map((k) => (
                   <kbd
                     key={k}
-                    className="rounded border border-(--border) bg-(--muted) px-1.5 py-0.5 font-mono text-[11px] text-(--fg)"
+                    className="rounded border border-(--border) bg-(--muted) px-1.5 py-0.5 font-mono text-xs text-(--fg)"
                   >
                     {k}
                   </kbd>

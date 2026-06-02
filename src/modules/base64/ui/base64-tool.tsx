@@ -42,7 +42,7 @@ export default function Base64Tool() {
 
       <div className="flex min-h-0 flex-1 flex-col gap-3 md:flex-row">
         <div className="flex min-h-0 flex-1 flex-col">
-          <span className="mb-1 text-[length:10px] font-semibold uppercase tracking-wider text-(--sidebar-fg)">
+          <span className="mb-1 text-xs font-semibold uppercase tracking-wider text-(--sidebar-fg)">
             Input
           </span>
           <textarea
@@ -50,12 +50,12 @@ export default function Base64Tool() {
             onChange={(e) => vm.setInput(e.target.value)}
             spellCheck={false}
             placeholder={vm.mode === "encode" ? "Text to encode…" : "Base64 to decode…"}
-            className="min-h-0 flex-1 resize-none rounded-md border border-(--border) bg-(--bg) p-3 font-mono text-sm text-(--fg) outline-none focus:border-(--accent)"
+            className="min-h-0 flex-1 resize-none rounded-md border border-(--border) bg-(--bg) p-3 font-mono text-sm text-(--fg) outline-hidden focus:border-(--accent)"
           />
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col">
-          <span className="mb-1 text-[length:10px] font-semibold uppercase tracking-wider text-(--sidebar-fg)">
+          <span className="mb-1 text-xs font-semibold uppercase tracking-wider text-(--sidebar-fg)">
             Output
           </span>
           <textarea
@@ -63,7 +63,7 @@ export default function Base64Tool() {
             readOnly
             spellCheck={false}
             placeholder="Result…"
-            className="min-h-0 flex-1 resize-none rounded-md border border-(--border) bg-(--sidebar-bg) p-3 font-mono text-sm text-(--fg) outline-none"
+            className="min-h-0 flex-1 resize-none rounded-md border border-(--border) bg-(--sidebar-bg) p-3 font-mono text-sm text-(--fg) outline-hidden"
           />
           {vm.error && (
             <p className="mt-1 text-xs text-red-400" role="alert">
