@@ -1,25 +1,33 @@
-import { Info, Keyboard, Settings, type LucideIcon } from "lucide-react";
 import { Flex } from "@/shared/ui";
+import { Keyboard, Settings, type LucideIcon } from "lucide-react";
+import type { MouseEventHandler } from "react";
 
 import { ShellIconButton } from "./shell-icon-button";
 
+type ItemOnClick = "shortcuts" | "settings";
+
 interface StatusBarProps {
   onShortcuts: () => void;
+  onSettings: () => void;
 }
 
-const ITEMS: { id: string; label: string; Icon: LucideIcon; onClick?: "shortcuts" }[] = [
+const ITEMS: { id: string; label: string; Icon: LucideIcon; onClick: ItemOnClick }[] = [
   { id: "shortcuts", label: "Shortcuts", Icon: Keyboard, onClick: "shortcuts" },
-  { id: "info", label: "Info", Icon: Info },
-  { id: "settings", label: "Settings", Icon: Settings },
+  { id: "settings", label: "Settings", Icon: Settings, onClick: "settings" },
 ];
 
-/** Bottom status bar with quick-access actions (shortcuts, info, settings). */
-export function StatusBar({ onShortcuts }: StatusBarProps) {
+/** Bottom status bar with quick-access actions (shortcuts, settings). */
+export function StatusBar({ onShortcuts, onSettings }: StatusBarProps) {
+  const onClickMapper: Record<ItemOnClick, MouseEventHandler<HTMLButtonElement>> = {
+    shortcuts: onShortcuts,
+    settings: onSettings,
+  };
+
   return (
     <Flex
       align="center"
       justify="end"
-      className="h-6 shrink-0 gap-0.5 border-t border-border bg-sidebar px-1.5"
+      className="h-8 shrink-0 gap-0.5 border-t border-border bg-sidebar px-1.5"
     >
       {ITEMS.map(({ id, label, Icon, onClick }) => (
         <ShellIconButton
@@ -27,8 +35,8 @@ export function StatusBar({ onShortcuts }: StatusBarProps) {
           type="button"
           title={label}
           aria-label={label}
-          onClick={onClick === "shortcuts" ? onShortcuts : undefined}
-          className="size-5"
+          onClick={onClickMapper[onClick]}
+          className="size-7 [&_svg]:size-5"
         >
           <Icon data-icon="inline-start" />
         </ShellIconButton>

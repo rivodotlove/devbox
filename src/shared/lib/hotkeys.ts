@@ -20,6 +20,11 @@ export const HOTKEYS = {
     label: "Show keyboard shortcuts",
     keys: ["?"],
   },
+  settings: {
+    command: "meta+alt+comma",
+    label: "Open settings",
+    keys: ["⌘⌥,"],
+  },
   closeTab: {
     command: "meta+alt+w",
     label: "Close active tab",
