@@ -1,65 +1,50 @@
-import { useNavigate } from "@tanstack/react-router";
-import { useHotkeys } from "react-hotkeys-hook";
-import { Command } from "cmdk";
 import { Search } from "lucide-react";
 import { CATEGORIES, TOOLS } from "@/shared/kernel/registry";
-import { useTabsStore } from "@/app/stores/use-tabs-store";
+import { Dialog, DialogContent, DialogTitle, VisuallyHidden } from "@/shared/ui/dialog";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/shared/ui/command";
+import { useCommandPalette } from "./use-command-palette";
 
 interface CommandPaletteProps {
   open: boolean;
   onClose: () => void;
 }
 
+/** Fuzzy tool launcher. Radix Dialog supplies focus-trap, Escape and click-outside. */
 export function CommandPalette({ open, onClose }: CommandPaletteProps) {
-  const navigate = useNavigate();
-  const openTab = useTabsStore((s) => s.open);
-
-  useHotkeys("escape", onClose, { enabled: open, enableOnFormTags: true });
-
-  if (!open) return null;
-
-  const handleSelect = (toolId: string) => {
-    openTab(toolId);
-    void navigate({ to: "/tool/$toolId", params: { toolId } });
-    onClose();
-  };
+  const { selectTool } = useCommandPalette(onClose);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]" onClick={onClose}>
-      <div
-        className="w-full max-w-xl overflow-hidden rounded-lg border border-(--border) bg-(--bg) shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <Command className="flex flex-col">
+    <Dialog open={open} onOpenChange={(next) => !next && onClose()}>
+      <DialogContent className="top-[15vh] w-full max-w-xl translate-y-0">
+        <VisuallyHidden.Root>
+          <DialogTitle>Command palette</DialogTitle>
+        </VisuallyHidden.Root>
+        <Command>
           <div className="flex items-center gap-2 border-b border-(--border) px-3">
             <Search size={14} className="shrink-0 text-(--sidebar-fg)" />
-            <Command.Input
-              autoFocus
-              placeholder="Search tools..."
-              className="flex-1 bg-transparent py-3 text-sm text-(--fg) placeholder:text-(--sidebar-fg) outline-hidden"
-            />
+            <CommandInput autoFocus placeholder="Search tools..." />
           </div>
-          <Command.List className="max-h-80 overflow-y-auto py-1.5">
-            <Command.Empty className="py-6 text-center text-sm text-(--sidebar-fg)">
-              No tools found.
-            </Command.Empty>
+          <CommandList>
+            <CommandEmpty>No tools found.</CommandEmpty>
             {CATEGORIES.map((category) => {
               const tools = TOOLS.filter((t) => t.category === category.id);
               if (tools.length === 0) return null;
               return (
-                <Command.Group
-                  key={category.id}
-                  heading={category.label}
-                  className="**:[[cmdk-group-heading]]:px-3 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-xs **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:tracking-wider **:[[cmdk-group-heading]]:text-(--sidebar-fg)/70"
-                >
+                <CommandGroup key={category.id} heading={category.label}>
                   {tools.map((tool) => {
                     const Icon = tool.icon;
                     return (
-                      <Command.Item
+                      <CommandItem
                         key={tool.id}
                         value={`${tool.name} ${tool.description}`}
-                        onSelect={() => handleSelect(tool.id)}
-                        className="flex cursor-pointer items-center gap-3 px-3 py-2 text-sm text-(--fg) data-[selected=true]:bg-(--muted)"
+                        onSelect={() => selectTool(tool.id)}
                       >
                         <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-(--accent)/15 text-(--accent)">
                           <Icon size={12} />
@@ -68,15 +53,15 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                         <span className="ml-auto text-xs text-(--sidebar-fg)">
                           {tool.description}
                         </span>
-                      </Command.Item>
+                      </CommandItem>
                     );
                   })}
-                </Command.Group>
+                </CommandGroup>
               );
             })}
-          </Command.List>
+          </CommandList>
         </Command>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
