@@ -1,7 +1,10 @@
-import { PanelLeft } from "lucide-react";
 import { getToolById } from "@/shared/kernel/registry";
-import { useTabBar } from "./use-tab-bar";
+import { Flex } from "@/shared/ui";
+import { PanelLeft } from "lucide-react";
+
+import { ShellIconButton } from "./shell-icon-button";
 import { TabItem } from "./tab-item";
+import { useTabBar } from "./use-tab-bar";
 
 interface TabBarProps {
   sidebarCollapsed: boolean;
@@ -12,20 +15,20 @@ interface TabBarProps {
 export function TabBar({ sidebarCollapsed, onToggleSidebar }: TabBarProps) {
   const { tabs, activeToolId, closeTab } = useTabBar();
   return (
-    <div className="flex h-11 shrink-0 items-stretch border-b border-(--border) bg-(--sidebar-bg)">
+    <Flex align="stretch" className="h-11 shrink-0 border-b border-(--border) bg-(--sidebar-bg)">
       {sidebarCollapsed && (
-        <button
+        <ShellIconButton
           type="button"
           title="Show sidebar (⌘B)"
           aria-label="Show sidebar"
           onClick={onToggleSidebar}
-          className="flex w-10 shrink-0 items-center justify-center border-r border-(--border) text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)"
+          className="h-full w-10 shrink-0 rounded-none border-r border-(--border)"
         >
-          <PanelLeft size={14} />
-        </button>
+          <PanelLeft data-icon="inline-start" />
+        </ShellIconButton>
       )}
       {tabs.length > 0 && (
-        <div className="flex flex-1 items-stretch overflow-x-auto">
+        <Flex align="stretch" className="flex-1 overflow-x-auto">
           {tabs.map((toolId) => {
             const tool = getToolById(toolId);
             if (!tool) return null;
@@ -38,8 +41,8 @@ export function TabBar({ sidebarCollapsed, onToggleSidebar }: TabBarProps) {
               />
             );
           })}
-        </div>
+        </Flex>
       )}
-    </div>
+    </Flex>
   );
 }
