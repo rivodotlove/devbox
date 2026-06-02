@@ -1,4 +1,4 @@
-import { type Result, domainError, ok } from "@/shared/kernel/result";
+import { type Result, domainError, ok } from "@/shared/kernel";
 
 export type Base64Mode = "encode" | "decode";
 
