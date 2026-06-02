@@ -6,5 +6,6 @@ export * from "./command";
 export * from "./dialog";
 export * from "./flex";
 export * from "./label";
+export * from "./select";
 export * from "./textarea";
 export * from "./typography";

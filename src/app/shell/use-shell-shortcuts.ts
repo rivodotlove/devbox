@@ -18,10 +18,9 @@ interface ShellShortcutsOptions {
  */
 export function useShellShortcuts({ toggleSidebar }: ShellShortcutsOptions): void {
   const navigate = useNavigate();
-  const tabs = useTabsStore((s) => s.tabs);
+  const { tabs } = useTabsStore();
   const activeToolId = useActiveToolId();
-  const openPalette = useShellStore((s) => s.openPalette);
-  const openCheatsheet = useShellStore((s) => s.openCheatsheet);
+  const { openPalette, openCheatsheet, openSettings } = useShellStore();
 
   const goToTool = (toolId: string) => navigate({ to: "/tool/$toolId", params: { toolId } });
 
@@ -40,6 +39,11 @@ export function useShellShortcuts({ toggleSidebar }: ShellShortcutsOptions): voi
   });
 
   useHotkeys(HOTKEYS.cheatsheet.command, () => openCheatsheet());
+
+  useHotkeys(HOTKEYS.settings.command, (e) => {
+    e.preventDefault();
+    openSettings();
+  });
 
   useHotkeys(HOTKEYS.closeTab.command, (e) => {
     e.preventDefault();

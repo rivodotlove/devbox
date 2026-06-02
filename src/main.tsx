@@ -5,7 +5,10 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
+import { initSettingsEffects } from "./app/stores/settings-effects";
 import { routeTree } from "./routeTree.gen";
+
+initSettingsEffects();
 
 const router = createRouter({ routeTree });
 

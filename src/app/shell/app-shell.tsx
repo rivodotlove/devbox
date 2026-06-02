@@ -11,6 +11,7 @@ import {
 import { useShellStore } from "../stores/use-shell-store";
 
 import { CommandPalette } from "./command-palette";
+import { SettingsDialog } from "./settings-dialog";
 import { ShortcutsCheatsheet } from "./shortcuts-cheatsheet";
 import { Sidebar } from "./sidebar";
 import { StatusBar } from "./status-bar";
@@ -23,13 +24,18 @@ interface AppShellProps {
 
 /** VS Code-style shell: resizable sidebar, tab bar, content area, status bar. */
 export function AppShell({ children }: AppShellProps) {
-  const paletteOpen = useShellStore((s) => s.paletteOpen);
-  const cheatsheetOpen = useShellStore((s) => s.cheatsheetOpen);
-  const sidebarCollapsed = useShellStore((s) => s.sidebarCollapsed);
-  const closePalette = useShellStore((s) => s.closePalette);
-  const openCheatsheet = useShellStore((s) => s.openCheatsheet);
-  const closeCheatsheet = useShellStore((s) => s.closeCheatsheet);
-  const setSidebarCollapsed = useShellStore((s) => s.setSidebarCollapsed);
+  const {
+    paletteOpen,
+    cheatsheetOpen,
+    sidebarCollapsed,
+    settingsOpen,
+    closePalette,
+    openCheatsheet,
+    closeCheatsheet,
+    openSettings,
+    closeSettings,
+    setSidebarCollapsed,
+  } = useShellStore();
 
   const sidebarRef = useRef<ImperativePanelHandle>(null);
   const toggleSidebar = useCallback(() => {
@@ -72,9 +78,10 @@ export function AppShell({ children }: AppShellProps) {
           </Panel>
         </PanelGroup>
       </Flex>
-      <StatusBar onShortcuts={openCheatsheet} />
+      <StatusBar onShortcuts={openCheatsheet} onSettings={openSettings} />
       <CommandPalette open={paletteOpen} onClose={closePalette} />
       <ShortcutsCheatsheet open={cheatsheetOpen} onClose={closeCheatsheet} />
+      <SettingsDialog open={settingsOpen} onClose={closeSettings} />
     </Flex>
   );
 }
