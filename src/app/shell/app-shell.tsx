@@ -54,13 +54,13 @@ export function AppShell({ children }: AppShellProps) {
             collapsedSize={0}
             onCollapse={() => setSidebarCollapsed(true)}
             onExpand={() => setSidebarCollapsed(false)}
-            className="border-r border-(--border) bg-(--sidebar-bg)"
+            className="border-r border-border bg-sidebar"
           >
             <Sidebar />
           </Panel>
           <PanelResizeHandle
             className={cn(
-              "w-px bg-(--border) data-[resize-handle-state=hover]:bg-(--accent)",
+              "w-px bg-border data-[resize-handle-state=hover]:bg-primary",
               sidebarCollapsed && "hidden",
             )}
           />

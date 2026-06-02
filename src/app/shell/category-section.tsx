@@ -19,7 +19,7 @@ export function CategorySection({ category, tools }: CategorySectionProps) {
   const Chevron = isOpen ? ChevronDown : ChevronRight;
   return (
     <Collapsible open={isOpen} onOpenChange={toggle} className="mt-1">
-      <CollapsibleTrigger className="flex w-full items-center gap-1 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-(--sidebar-fg)/70 hover:text-(--fg)">
+      <CollapsibleTrigger className="flex w-full items-center gap-1 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-sidebar-foreground/70 hover:text-foreground">
         <Chevron size={12} />
         <Typography variant="span">{category.label}</Typography>
       </CollapsibleTrigger>

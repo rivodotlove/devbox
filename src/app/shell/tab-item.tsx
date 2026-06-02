@@ -20,18 +20,21 @@ export function TabItem({ tool, isActive, onClose }: TabItemProps) {
     <Flex
       align="stretch"
       className={cn(
-        "group relative h-full shrink-0 border-r border-(--border)",
-        isActive ? "bg-(--bg)" : "hover:bg-(--muted)/50",
+        "group relative h-full shrink-0 border-r border-border",
+        isActive ? "bg-(--bg)" : "hover:bg-muted/50",
       )}
     >
       {isActive && (
-        <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-(--accent)" />
+        <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-primary" />
       )}
       <Flex
         asChild
         align="center"
         gap={2}
-        className={cn("h-full pl-3 pr-1 text-sm", isActive ? "text-(--fg)" : "text-(--sidebar-fg)")}
+        className={cn(
+          "h-full pl-3 pr-1 text-sm",
+          isActive ? "text-foreground" : "text-sidebar-foreground",
+        )}
       >
         <Link
           to="/tool/$toolId"

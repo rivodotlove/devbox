@@ -19,7 +19,7 @@ export function StatusBar({ onShortcuts }: StatusBarProps) {
     <Flex
       align="center"
       justify="end"
-      className="h-6 shrink-0 gap-0.5 border-t border-(--border) bg-(--sidebar-bg) px-1.5"
+      className="h-6 shrink-0 gap-0.5 border-t border-border bg-sidebar px-1.5"
     >
       {ITEMS.map(({ id, label, Icon, onClick }) => (
         <ShellIconButton

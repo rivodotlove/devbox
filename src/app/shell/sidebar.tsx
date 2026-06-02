@@ -8,7 +8,7 @@ export function Sidebar() {
     <Flex direction="col" className="h-full overflow-y-auto py-3">
       <Typography
         variant="span"
-        className="px-4 pb-3 text-xs font-semibold uppercase tracking-wider text-(--sidebar-fg)"
+        className="px-4 pb-3 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground"
       >
         Tools
       </Typography>
