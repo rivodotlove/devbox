@@ -1,4 +1,7 @@
-import { Keyboard, Info, Settings, type LucideIcon } from "lucide-react";
+import { Info, Keyboard, Settings, type LucideIcon } from "lucide-react";
+import { Flex } from "@/shared/ui";
+
+import { ShellIconButton } from "./shell-icon-button";
 
 interface StatusBarProps {
   onShortcuts: () => void;
@@ -13,19 +16,23 @@ const ITEMS: { id: string; label: string; Icon: LucideIcon; onClick?: "shortcuts
 /** Bottom status bar with quick-access actions (shortcuts, info, settings). */
 export function StatusBar({ onShortcuts }: StatusBarProps) {
   return (
-    <div className="flex h-6 shrink-0 items-center justify-end gap-0.5 border-t border-(--border) bg-(--sidebar-bg) px-1.5">
+    <Flex
+      align="center"
+      justify="end"
+      className="h-6 shrink-0 gap-0.5 border-t border-(--border) bg-(--sidebar-bg) px-1.5"
+    >
       {ITEMS.map(({ id, label, Icon, onClick }) => (
-        <button
+        <ShellIconButton
           key={id}
           type="button"
           title={label}
           aria-label={label}
           onClick={onClick === "shortcuts" ? onShortcuts : undefined}
-          className="flex h-5 w-5 items-center justify-center rounded text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)"
+          className="size-5"
         >
-          <Icon size={12} />
-        </button>
+          <Icon data-icon="inline-start" />
+        </ShellIconButton>
       ))}
-    </div>
+    </Flex>
   );
 }

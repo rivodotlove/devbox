@@ -1,6 +1,4 @@
-import { Search } from "lucide-react";
-import { CATEGORIES, TOOLS } from "@/shared/kernel/registry";
-import { Dialog, DialogContent, DialogTitle, VisuallyHidden } from "@/shared/ui/dialog";
+import { CATEGORIES, TOOLS } from "@/shared/kernel";
 import {
   Command,
   CommandEmpty,
@@ -8,7 +6,15 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/shared/ui/command";
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Flex,
+  Typography,
+  VisuallyHidden,
+} from "@/shared/ui";
+import { Search } from "lucide-react";
+
 import { useCommandPalette } from "./use-command-palette";
 
 interface CommandPaletteProps {
@@ -27,10 +33,10 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
           <DialogTitle>Command palette</DialogTitle>
         </VisuallyHidden.Root>
         <Command>
-          <div className="flex items-center gap-2 border-b border-(--border) px-3">
+          <Flex align="center" gap={2} className="border-b border-(--border) px-3">
             <Search size={14} className="shrink-0 text-(--sidebar-fg)" />
             <CommandInput autoFocus placeholder="Search tools..." />
-          </div>
+          </Flex>
           <CommandList>
             <CommandEmpty>No tools found.</CommandEmpty>
             {CATEGORIES.map((category) => {
@@ -46,13 +52,17 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                         value={`${tool.name} ${tool.description}`}
                         onSelect={() => selectTool(tool.id)}
                       >
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-(--accent)/15 text-(--accent)">
+                        <Flex
+                          align="center"
+                          justify="center"
+                          className="h-6 w-6 shrink-0 rounded bg-(--accent)/15 text-(--accent)"
+                        >
                           <Icon size={12} />
-                        </span>
-                        <span>{tool.name}</span>
-                        <span className="ml-auto text-xs text-(--sidebar-fg)">
+                        </Flex>
+                        <Typography variant="span">{tool.name}</Typography>
+                        <Typography variant="span" className="ml-auto text-xs text-(--sidebar-fg)">
                           {tool.description}
-                        </span>
+                        </Typography>
                       </CommandItem>
                     );
                   })}

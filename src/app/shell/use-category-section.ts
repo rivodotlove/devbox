@@ -1,5 +1,6 @@
+import { type ToolDefinition } from "@/shared/kernel";
 import { useState } from "react";
-import { type ToolDefinition } from "@/shared/kernel/registry";
+
 import { useActiveToolId } from "./use-active-tool-id";
 
 /**

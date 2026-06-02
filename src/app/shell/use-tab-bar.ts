@@ -1,6 +1,8 @@
-import { type MouseEvent } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { useTabsStore } from "@/app/stores/use-tabs-store";
+import { type MouseEvent } from "react";
+
+import { useTabsStore } from "../stores/use-tabs-store";
+
 import { useActiveToolId } from "./use-active-tool-id";
 
 /** View-model for the tab bar: tab list, active tab, and close-with-navigation. */
