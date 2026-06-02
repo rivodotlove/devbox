@@ -52,7 +52,7 @@ export default function Base64Tool() {
         <Flex direction="col" className="min-h-0 flex-1">
           <Typography
             variant="span"
-            className="mb-1 text-xs font-semibold uppercase tracking-wider text-(--sidebar-fg)"
+            className="mb-1 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground"
           >
             Output
           </Typography>

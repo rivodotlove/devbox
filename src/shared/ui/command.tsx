@@ -15,7 +15,7 @@ export function CommandInput({
   return (
     <CommandPrimitive.Input
       className={cn(
-        "flex-1 bg-transparent py-3 text-sm text-(--fg) outline-hidden placeholder:text-(--sidebar-fg)",
+        "flex-1 bg-transparent py-3 text-sm text-foreground outline-hidden placeholder:text-sidebar-foreground",
         className,
       )}
       {...props}
@@ -38,7 +38,7 @@ export function CommandEmpty({
 }: ComponentProps<typeof CommandPrimitive.Empty>) {
   return (
     <CommandPrimitive.Empty
-      className={cn("py-6 text-center text-sm text-(--sidebar-fg)", className)}
+      className={cn("py-6 text-center text-sm text-sidebar-foreground", className)}
       {...props}
     />
   );
@@ -51,7 +51,7 @@ export function CommandGroup({
   return (
     <CommandPrimitive.Group
       className={cn(
-        "**:[[cmdk-group-heading]]:px-3 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-xs **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:tracking-wider **:[[cmdk-group-heading]]:text-(--sidebar-fg)/70",
+        "**:[[cmdk-group-heading]]:px-3 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-xs **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:tracking-wider **:[[cmdk-group-heading]]:text-sidebar-foreground/70",
         className,
       )}
       {...props}
@@ -63,7 +63,7 @@ export function CommandItem({ className, ...props }: ComponentProps<typeof Comma
   return (
     <CommandPrimitive.Item
       className={cn(
-        "flex cursor-pointer items-center gap-3 px-3 py-2 text-sm text-(--fg) data-[selected=true]:bg-(--muted)",
+        "flex cursor-pointer items-center gap-3 px-3 py-2 text-sm text-foreground data-[selected=true]:bg-muted",
         className,
       )}
       {...props}

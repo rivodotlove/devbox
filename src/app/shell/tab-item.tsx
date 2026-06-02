@@ -21,7 +21,7 @@ export function TabItem({ tool, isActive, onClose }: TabItemProps) {
       align="stretch"
       className={cn(
         "group relative h-full shrink-0 border-r border-border",
-        isActive ? "bg-(--bg)" : "hover:bg-muted/50",
+        isActive ? "bg-background" : "hover:bg-muted/50",
       )}
     >
       {isActive && (

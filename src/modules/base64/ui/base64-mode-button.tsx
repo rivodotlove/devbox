@@ -18,8 +18,8 @@ export function Base64ModeButton({ isActive, onClick, children }: Base64ModeButt
       className={cn(
         "rounded-none px-3 text-xs font-medium",
         isActive
-          ? "bg-(--accent)/15 text-(--accent) hover:bg-(--accent)/15 hover:text-(--accent)"
-          : "text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)",
+          ? "bg-primary/15 text-primary hover:bg-primary/15 hover:text-primary"
+          : "text-sidebar-foreground hover:bg-muted hover:text-foreground",
       )}
     >
       {children}
