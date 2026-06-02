@@ -2,8 +2,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { useHotkeys } from "react-hotkeys-hook";
 import { Command } from "cmdk";
 import { Search } from "lucide-react";
-import { CATEGORIES, TOOLS } from "@/tools/registry";
-import { useTabsStore } from "@/stores/use-tabs-store";
+import { CATEGORIES, TOOLS } from "@/shared/kernel/registry";
+import { useTabsStore } from "@/app/stores/use-tabs-store";
 
 interface CommandPaletteProps {
   open: boolean;

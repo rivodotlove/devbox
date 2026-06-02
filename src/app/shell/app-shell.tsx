@@ -8,17 +8,17 @@ import {
 } from "react-resizable-panels";
 import { useHotkeys } from "react-hotkeys-hook";
 import { Keyboard, Info, Settings, ChevronDown, ChevronRight, X, PanelLeft } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useTabsStore } from "@/stores/use-tabs-store";
-import { useShellStore } from "@/stores/use-shell-store";
+import { cn } from "@/shared/utils";
+import { useTabsStore } from "@/app/stores/use-tabs-store";
+import { useShellStore } from "@/app/stores/use-shell-store";
 import {
   CATEGORIES,
   getToolById,
   getToolsByCategory,
   type ToolCategory,
   type ToolDefinition,
-} from "@/tools/registry";
-import { HOTKEYS } from "@/lib/hotkeys";
+} from "@/shared/kernel/registry";
+import { HOTKEYS } from "@/shared/lib/hotkeys";
 import { CommandPalette } from "./command-palette";
 import { ShortcutsCheatsheet } from "./shortcuts-cheatsheet";
 
