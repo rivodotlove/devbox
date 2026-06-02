@@ -1,10 +1,10 @@
 import { Flex } from "@/shared/ui";
-import { Info, Keyboard, Settings, type LucideIcon } from "lucide-react";
+import { Keyboard, Settings, type LucideIcon } from "lucide-react";
 import type { MouseEventHandler } from "react";
 
 import { ShellIconButton } from "./shell-icon-button";
 
-type ItemOnClick = "shortcuts" | "info" | "settings";
+type ItemOnClick = "shortcuts" | "settings";
 
 interface StatusBarProps {
   onShortcuts: () => void;
@@ -13,15 +13,13 @@ interface StatusBarProps {
 
 const ITEMS: { id: string; label: string; Icon: LucideIcon; onClick: ItemOnClick }[] = [
   { id: "shortcuts", label: "Shortcuts", Icon: Keyboard, onClick: "shortcuts" },
-  { id: "info", label: "Info", Icon: Info, onClick: "info" },
   { id: "settings", label: "Settings", Icon: Settings, onClick: "settings" },
 ];
 
-/** Bottom status bar with quick-access actions (shortcuts, info, settings). */
+/** Bottom status bar with quick-access actions (shortcuts, settings). */
 export function StatusBar({ onShortcuts, onSettings }: StatusBarProps) {
   const onClickMapper: Record<ItemOnClick, MouseEventHandler<HTMLButtonElement>> = {
     shortcuts: onShortcuts,
-    info: () => {},
     settings: onSettings,
   };
 

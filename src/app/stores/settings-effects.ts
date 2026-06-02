@@ -8,7 +8,9 @@ function applyTheme(theme: ThemeId): void {
 }
 
 function applyFont(font: FontId): void {
-  void loadFont(font);
+  loadFont(font).catch(() => {
+    /* fallback fonts in cssFamily apply; ignore chunk load failure */
+  });
   document.documentElement.style.setProperty("--font-mono", getFont(font).cssFamily);
 }
 

@@ -51,7 +51,9 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
               <SelectContent>
                 <SelectGroup>
                   {THEMES.map((theme) => (
-                    <SelectItem value={theme.id}>{theme.label}</SelectItem>
+                    <SelectItem key={theme.id} value={theme.id}>
+                      {theme.label}
+                    </SelectItem>
                   ))}
                 </SelectGroup>
               </SelectContent>
@@ -61,12 +63,14 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
           <SettingField id="setting-font" label="Font">
             <Select value={font} onValueChange={setFont}>
               <SelectTrigger className="w-48">
-                <SelectValue placeholder="Theme" />
+                <SelectValue placeholder="Font" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   {FONTS.map((font) => (
-                    <SelectItem value={font.id}>{font.label}</SelectItem>
+                    <SelectItem key={font.id} value={font.id}>
+                      {font.label}
+                    </SelectItem>
                   ))}
                 </SelectGroup>
               </SelectContent>
@@ -76,11 +80,11 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
           <SettingField id="setting-font-size" label="Font size" hint="Available once editors land">
             <Select value={fontSize.toString()} disabled>
               <SelectTrigger className="w-24">
-                <SelectValue placeholder="Theme" />
+                <SelectValue placeholder="Font size" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value={fontSize.toString()}>{fontSize}px</SelectItem>
+                  <SelectItem value={fontSize.toString()}>{fontSize}</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -89,11 +93,11 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
           <SettingField id="setting-tab-size" label="Tab size" hint="Available once editors land">
             <Select value={tabSize.toString()} disabled>
               <SelectTrigger className="w-20">
-                <SelectValue placeholder="Theme" />
+                <SelectValue placeholder="Tab size" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value={tabSize.toString()}>{tabSize}px</SelectItem>
+                  <SelectItem value={tabSize.toString()}>{tabSize} spaces</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
