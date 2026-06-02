@@ -8,7 +8,7 @@ Comprehensive guide to customizing Tailwind CSS configuration.
 
 - Extending the default color palette
 - Custom color shades
-- Opacity modifiers
+- Color opacity via slash syntax (e.g., `bg-blue-500/50`, `text-gray-900/80`)
 
 ### Spacing
 
@@ -33,9 +33,9 @@ Comprehensive guide to customizing Tailwind CSS configuration.
 
 ## Content Configuration
 
-- Configuring content paths
-- Template paths for purging
-- Safe listing classes
+- Automatic content detection (no `content` array needed)
+- Adding extra sources with `@source` when scanning misses files
+- Safe listing classes with `@source inline(...)`
 
 ## Plugins
 
@@ -60,7 +60,7 @@ Comprehensive guide to customizing Tailwind CSS configuration.
 
 ## Production Optimization
 
-- PurgeCSS configuration
+- Automatic content detection (built-in, replaces PurgeCSS)
 - Minification
 - File size optimization
 

@@ -26,7 +26,7 @@ Best practices for using Tailwind CSS v4 utility classes effectively.
 // Flexbox
 <div className="flex items-center justify-between gap-4">
   <div className="flex-1">Content</div>
-  <div className="flex-shrink-0">Sidebar</div>
+  <div className="shrink-0">Sidebar</div>
 </div>
 
 // Grid
@@ -116,7 +116,7 @@ Best practices for using Tailwind CSS v4 utility classes effectively.
 ### Button
 
 ```tsx
-<button className="px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+<button className="px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
   Click me
 </button>
 
@@ -148,7 +148,7 @@ Best practices for using Tailwind CSS v4 utility classes effectively.
   <input
     type="email"
     id="email"
-    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent"
     placeholder="you@example.com"
   />
   <p className="text-sm text-gray-500">We'll never share your email.</p>
@@ -221,7 +221,7 @@ Best practices for using Tailwind CSS v4 utility classes effectively.
 /* components/button.css */
 .btn-primary {
   @apply px-4 py-2 bg-blue-600 text-white font-medium rounded-md;
-  @apply hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500;
+  @apply hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500;
   @apply disabled:opacity-50 disabled:cursor-not-allowed;
 }
 ```
@@ -355,7 +355,7 @@ Tailwind v4 delivers 3.5x faster full builds (~100ms) compared to v3 using moder
 4. **Leverage @apply Sparingly**: Prefer utility classes in JSX
 5. **Enable Dark Mode**: Plan for dark mode from the start
 6. **Use Plugins**: Leverage official plugins for common needs
-7. **Optimize Production**: Ensure purge is configured correctly
+7. **Optimize Production**: Rely on v4's automatic content detection (no PurgeCSS); add `@source` only for classes in files it can't scan
 
 ## Additional Resources
 
