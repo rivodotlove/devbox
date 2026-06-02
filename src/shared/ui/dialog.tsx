@@ -43,7 +43,7 @@ export function DialogContent({
         aria-describedby={undefined}
         className={cn(
           "fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 overflow-hidden",
-          "rounded-lg border border-(--border) bg-(--bg) shadow-2xl",
+          "rounded-lg border border-border bg-background shadow-2xl",
           "focus:outline-hidden",
           className,
         )}

@@ -9,7 +9,10 @@ export function ShellIconButton({ className, ...props }: ShellIconButtonProps) {
     <Button
       variant="ghost"
       size="icon-xs"
-      className={cn("rounded text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)", className)}
+      className={cn(
+        "rounded text-sidebar-foreground hover:bg-muted hover:text-foreground",
+        className,
+      )}
       {...props}
     />
   );

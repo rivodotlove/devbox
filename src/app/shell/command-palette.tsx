@@ -33,8 +33,8 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
           <DialogTitle>Command palette</DialogTitle>
         </VisuallyHidden.Root>
         <Command>
-          <Flex align="center" gap={2} className="border-b border-(--border) px-3">
-            <Search size={14} className="shrink-0 text-(--sidebar-fg)" />
+          <Flex align="center" gap={2} className="border-b border-border px-3">
+            <Search size={14} className="shrink-0 text-sidebar-foreground" />
             <CommandInput autoFocus placeholder="Search tools..." />
           </Flex>
           <CommandList>
@@ -55,12 +55,15 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                         <Flex
                           align="center"
                           justify="center"
-                          className="h-6 w-6 shrink-0 rounded bg-(--accent)/15 text-(--accent)"
+                          className="h-6 w-6 shrink-0 rounded bg-primary/15 text-primary"
                         >
                           <Icon size={12} />
                         </Flex>
                         <Typography variant="span">{tool.name}</Typography>
-                        <Typography variant="span" className="ml-auto text-xs text-(--sidebar-fg)">
+                        <Typography
+                          variant="span"
+                          className="ml-auto text-xs text-sidebar-foreground"
+                        >
                           {tool.description}
                         </Typography>
                       </CommandItem>

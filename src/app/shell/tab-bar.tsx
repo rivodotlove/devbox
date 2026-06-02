@@ -15,14 +15,14 @@ interface TabBarProps {
 export function TabBar({ sidebarCollapsed, onToggleSidebar }: TabBarProps) {
   const { tabs, activeToolId, closeTab } = useTabBar();
   return (
-    <Flex align="stretch" className="h-11 shrink-0 border-b border-(--border) bg-(--sidebar-bg)">
+    <Flex align="stretch" className="h-11 shrink-0 border-b border-border bg-sidebar">
       {sidebarCollapsed && (
         <ShellIconButton
           type="button"
           title="Show sidebar (⌘B)"
           aria-label="Show sidebar"
           onClick={onToggleSidebar}
-          className="h-full w-10 shrink-0 rounded-none border-r border-(--border)"
+          className="h-full w-10 shrink-0 rounded-none border-r border-border"
         >
           <PanelLeft data-icon="inline-start" />
         </ShellIconButton>

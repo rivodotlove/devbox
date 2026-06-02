@@ -17,7 +17,7 @@ export default function Base64Tool() {
     <Flex direction="col" gap={3} className="h-full w-full p-4">
       <Flex asChild align="center" wrap="wrap" gap={3} className="shrink-0">
         <Box>
-          <Flex className="border border-(--border) rounded-md">
+          <Flex className="border border-border rounded-md">
             {MODES.map((m) => (
               <Base64ModeButton key={m.id} isActive={m.id === mode} onClick={() => setMode(m.id)}>
                 {m.label}
@@ -25,7 +25,7 @@ export default function Base64Tool() {
             ))}
           </Flex>
 
-          <Flex align="center" className="gap-1.5 text-xs text-(--sidebar-fg)">
+          <Flex align="center" className="gap-1.5 text-xs text-sidebar-foreground">
             <Checkbox id="urlSafe" checked={urlSafe} onCheckedChange={toggleUrlSafe} />
             <Label htmlFor="urlSafe">URL-safe</Label>
           </Flex>
@@ -36,7 +36,7 @@ export default function Base64Tool() {
         <Flex direction="col" className="min-h-0 flex-1">
           <Typography
             variant="span"
-            className="mb-1 text-xs font-semibold uppercase tracking-wider text-(--sidebar-fg)"
+            className="mb-1 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground"
           >
             Input
           </Typography>
@@ -45,14 +45,14 @@ export default function Base64Tool() {
             onChange={(e) => setInput(e.target.value)}
             spellCheck={false}
             placeholder={mode === "encode" ? "Text to encode…" : "Base64 to decode…"}
-            className="flex-1 resize-none border-(--border)"
+            className="flex-1 resize-none border-border"
           />
         </Flex>
 
         <Flex direction="col" className="min-h-0 flex-1">
           <Typography
             variant="span"
-            className="mb-1 text-xs font-semibold uppercase tracking-wider text-(--sidebar-fg)"
+            className="mb-1 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground"
           >
             Output
           </Typography>
@@ -61,7 +61,7 @@ export default function Base64Tool() {
             readOnly
             spellCheck={false}
             placeholder="Result…"
-            className="flex-1 resize-none border-(--border) focus-visible:ring-0"
+            className="flex-1 resize-none border-border focus-visible:border-border focus-visible:ring-0"
           />
           {error && (
             <Typography variant="span" as="p" className="mt-1 text-xs text-red-400" role="alert">
