@@ -139,8 +139,8 @@ export function AppShell({ children }: AppShellProps) {
 }
 
 const TOOL_LINK_BASE =
-  "group flex items-center gap-3 px-4 py-1.5 text-[length:13px] text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)";
-const TOOL_LINK_ACTIVE = "bg-(--muted) text-(--fg) border-l-2 border-(--accent) pl-[14px]";
+  "group flex items-center gap-3 px-4 py-1.5 text-sm text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)";
+const TOOL_LINK_ACTIVE = "bg-(--muted) text-(--fg) border-l-2 border-(--accent) pl-3.5";
 
 function Sidebar() {
   return (
@@ -173,7 +173,7 @@ function CategorySection({ category, tools }: { category: ToolCategory; tools: T
       <button
         type="button"
         onClick={() => setIsOpen((v) => !v)}
-        className="flex w-full items-center gap-1 px-3 py-1.5 text-[length:10px] font-medium uppercase tracking-wider text-(--sidebar-fg)/70 hover:text-(--fg)"
+        className="flex w-full items-center gap-1 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-(--sidebar-fg)/70 hover:text-(--fg)"
       >
         <Chevron size={12} />
         <span>{category.label}</span>
@@ -259,7 +259,7 @@ function TabBar({
                 )}
               >
                 {isActive && (
-                  <span className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-(--accent)" />
+                  <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-(--accent)" />
                 )}
                 <Link
                   to="/tool/$toolId"
@@ -268,7 +268,7 @@ function TabBar({
                     if (e.button === 1) handleClose(e, toolId);
                   }}
                   className={cn(
-                    "flex h-full items-center gap-2 pl-3 pr-1 text-[13px]",
+                    "flex h-full items-center gap-2 pl-3 pr-1 text-sm",
                     isActive ? "text-(--fg)" : "text-(--sidebar-fg)",
                   )}
                 >

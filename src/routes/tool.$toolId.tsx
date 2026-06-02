@@ -27,7 +27,7 @@ function ToolRoute() {
           <p className="mt-1 text-sm text-(--sidebar-fg)">
             No tool registered with id <code>{toolId}</code>.
           </p>
-          <Link to="/" className="mt-4 inline-block text-sm text-[var(--accent)] hover:underline">
+          <Link to="/" className="mt-4 inline-block text-sm text-(--accent) hover:underline">
             Back to welcome
           </Link>
         </div>

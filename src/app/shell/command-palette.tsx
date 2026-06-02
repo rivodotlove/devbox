@@ -14,7 +14,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
   const navigate = useNavigate();
   const openTab = useTabsStore((s) => s.open);
 
-  useHotkeys("escape", onClose, { enabled: open });
+  useHotkeys("escape", onClose, { enabled: open, enableOnFormTags: true });
 
   if (!open) return null;
 
@@ -36,7 +36,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
             <Command.Input
               autoFocus
               placeholder="Search tools..."
-              className="flex-1 bg-transparent py-3 text-sm text-(--fg) placeholder:text-(--sidebar-fg) outline-none"
+              className="flex-1 bg-transparent py-3 text-sm text-(--fg) placeholder:text-(--sidebar-fg) outline-hidden"
             />
           </div>
           <Command.List className="max-h-80 overflow-y-auto py-1.5">
@@ -50,7 +50,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                 <Command.Group
                   key={category.id}
                   heading={category.label}
-                  className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider [&_[cmdk-group-heading]]:text-(--sidebar-fg)/70"
+                  className="**:[[cmdk-group-heading]]:px-3 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-xs **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:tracking-wider **:[[cmdk-group-heading]]:text-(--sidebar-fg)/70"
                 >
                   {tools.map((tool) => {
                     const Icon = tool.icon;
