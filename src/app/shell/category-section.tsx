@@ -1,8 +1,9 @@
+import type { ToolCategory, ToolDefinition } from "@/shared/kernel";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger, Typography } from "@/shared/ui";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { type ToolCategory, type ToolDefinition } from "@/shared/kernel/registry";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible";
-import { useCategorySection } from "./use-category-section";
+
 import { SidebarToolLink } from "./sidebar-tool-link";
+import { useCategorySection } from "./use-category-section";
 
 interface CategorySectionProps {
   category: ToolCategory;
@@ -20,7 +21,7 @@ export function CategorySection({ category, tools }: CategorySectionProps) {
     <Collapsible open={isOpen} onOpenChange={toggle} className="mt-1">
       <CollapsibleTrigger className="flex w-full items-center gap-1 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-(--sidebar-fg)/70 hover:text-(--fg)">
         <Chevron size={12} />
-        <span>{category.label}</span>
+        <Typography variant="span">{category.label}</Typography>
       </CollapsibleTrigger>
       <CollapsibleContent asChild>
         <ul className="py-0.5">

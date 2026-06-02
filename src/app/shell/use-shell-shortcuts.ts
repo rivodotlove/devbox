@@ -1,8 +1,10 @@
+import { HOTKEYS } from "@/shared/lib/hotkeys";
 import { useNavigate } from "@tanstack/react-router";
 import { useHotkeys } from "react-hotkeys-hook";
-import { HOTKEYS } from "@/shared/lib/hotkeys";
-import { useShellStore } from "@/app/stores/use-shell-store";
-import { useTabsStore } from "@/app/stores/use-tabs-store";
+
+import { useShellStore } from "../stores/use-shell-store";
+import { useTabsStore } from "../stores/use-tabs-store";
+
 import { useActiveToolId } from "./use-active-tool-id";
 
 interface ShellShortcutsOptions {

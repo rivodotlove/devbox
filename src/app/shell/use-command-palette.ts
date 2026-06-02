@@ -1,5 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useTabsStore } from "@/app/stores/use-tabs-store";
+
+import { useTabsStore } from "../stores/use-tabs-store";
 
 /** Command-palette actions: open the chosen tool as a tab, route to it, then close. */
 export function useCommandPalette(onClose: () => void) {

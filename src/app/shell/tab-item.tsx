@@ -1,8 +1,11 @@
-import { type MouseEvent } from "react";
+import { type ToolDefinition } from "@/shared/kernel/registry";
+import { Flex, Typography } from "@/shared/ui";
+import { cn } from "@/shared/utils";
 import { Link } from "@tanstack/react-router";
 import { X } from "lucide-react";
-import { type ToolDefinition } from "@/shared/kernel/registry";
-import { cn } from "@/shared/utils";
+import { type MouseEvent } from "react";
+
+import { ShellIconButton } from "./shell-icon-button";
 
 interface TabItemProps {
   tool: ToolDefinition;
@@ -14,41 +17,47 @@ interface TabItemProps {
 export function TabItem({ tool, isActive, onClose }: TabItemProps) {
   const Icon = tool.icon;
   return (
-    <div
+    <Flex
+      align="stretch"
       className={cn(
-        "group relative flex h-full shrink-0 items-stretch border-r border-(--border)",
+        "group relative h-full shrink-0 border-r border-(--border)",
         isActive ? "bg-(--bg)" : "hover:bg-(--muted)/50",
       )}
     >
       {isActive && (
         <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-(--accent)" />
       )}
-      <Link
-        to="/tool/$toolId"
-        params={{ toolId: tool.id }}
-        onAuxClick={(e) => {
-          if (e.button === 1) onClose(e, tool.id);
-        }}
-        className={cn(
-          "flex h-full items-center gap-2 pl-3 pr-1 text-sm",
-          isActive ? "text-(--fg)" : "text-(--sidebar-fg)",
-        )}
+      <Flex
+        asChild
+        align="center"
+        gap={2}
+        className={cn("h-full pl-3 pr-1 text-sm", isActive ? "text-(--fg)" : "text-(--sidebar-fg)")}
       >
-        <Icon size={13} />
-        <span className="max-w-40 truncate">{tool.name}</span>
-      </Link>
-      <button
+        <Link
+          to="/tool/$toolId"
+          params={{ toolId: tool.id }}
+          onAuxClick={(e) => {
+            if (e.button === 1) onClose(e, tool.id);
+          }}
+        >
+          <Icon size={13} />
+          <Typography variant="span" className="max-w-40 truncate">
+            {tool.name}
+          </Typography>
+        </Link>
+      </Flex>
+      <ShellIconButton
         type="button"
         onClick={(e) => onClose(e, tool.id)}
         aria-label={`Close ${tool.name} tab`}
         title="Close (or middle-click)"
         className={cn(
-          "mx-1.5 my-auto flex h-5 w-5 items-center justify-center rounded text-(--sidebar-fg) opacity-0 hover:bg-(--muted) hover:text-(--fg) group-hover:opacity-100",
+          "mx-1.5 my-auto size-5 opacity-0 group-hover:opacity-100",
           isActive && "opacity-70",
         )}
       >
-        <X size={12} />
-      </button>
-    </div>
+        <X data-icon="inline-start" />
+      </ShellIconButton>
+    </Flex>
   );
 }

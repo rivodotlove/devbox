@@ -1,4 +1,8 @@
+import { Box, Checkbox, Flex, Label, Textarea, Typography } from "@/shared/ui";
+
 import type { Base64Mode } from "../domain/base64";
+
+import { Base64ModeButton } from "./base64-mode-button";
 import { useBase64 } from "./use-base64";
 
 const MODES: { id: Base64Mode; label: string }[] = [
@@ -7,71 +11,65 @@ const MODES: { id: Base64Mode; label: string }[] = [
 ];
 
 export default function Base64Tool() {
-  const vm = useBase64();
+  const { mode, setMode, urlSafe, toggleUrlSafe, input, setInput, output, error } = useBase64();
 
   return (
-    <div className="flex h-full w-full flex-col gap-3 p-4">
-      <header className="flex shrink-0 flex-wrap items-center gap-3">
-        <div className="flex overflow-hidden rounded-md border border-(--border)">
-          {MODES.map((m) => (
-            <button
-              key={m.id}
-              type="button"
-              onClick={() => vm.setMode(m.id)}
-              className={
-                m.id === vm.mode
-                  ? "px-3 py-1 text-xs font-medium bg-(--accent)/15 text-(--accent)"
-                  : "px-3 py-1 text-xs font-medium text-(--sidebar-fg) hover:bg-(--muted) hover:text-(--fg)"
-              }
-            >
-              {m.label}
-            </button>
-          ))}
-        </div>
+    <Flex direction="col" gap={3} className="h-full w-full p-4">
+      <Flex asChild align="center" wrap="wrap" gap={3} className="shrink-0">
+        <Box>
+          <Flex className="border border-(--border) rounded-md">
+            {MODES.map((m) => (
+              <Base64ModeButton key={m.id} isActive={m.id === mode} onClick={() => setMode(m.id)}>
+                {m.label}
+              </Base64ModeButton>
+            ))}
+          </Flex>
 
-        <label className="flex items-center gap-1.5 text-xs text-(--sidebar-fg)">
-          <input
-            type="checkbox"
-            checked={vm.urlSafe}
-            onChange={vm.toggleUrlSafe}
-            className="accent-(--accent)"
-          />
-          URL-safe
-        </label>
-      </header>
+          <Flex align="center" className="gap-1.5 text-xs text-(--sidebar-fg)">
+            <Checkbox id="urlSafe" checked={urlSafe} onCheckedChange={toggleUrlSafe} />
+            <Label htmlFor="urlSafe">URL-safe</Label>
+          </Flex>
+        </Box>
+      </Flex>
 
-      <div className="flex min-h-0 flex-1 flex-col gap-3 md:flex-row">
-        <div className="flex min-h-0 flex-1 flex-col">
-          <span className="mb-1 text-xs font-semibold uppercase tracking-wider text-(--sidebar-fg)">
+      <Flex direction="col" gap={3} className="min-h-0 flex-1 md:flex-row">
+        <Flex direction="col" className="min-h-0 flex-1">
+          <Typography
+            variant="span"
+            className="mb-1 text-xs font-semibold uppercase tracking-wider text-(--sidebar-fg)"
+          >
             Input
-          </span>
-          <textarea
-            value={vm.input}
-            onChange={(e) => vm.setInput(e.target.value)}
+          </Typography>
+          <Textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
             spellCheck={false}
-            placeholder={vm.mode === "encode" ? "Text to encode…" : "Base64 to decode…"}
-            className="min-h-0 flex-1 resize-none rounded-md border border-(--border) bg-(--bg) p-3 font-mono text-sm text-(--fg) outline-hidden focus:border-(--accent)"
+            placeholder={mode === "encode" ? "Text to encode…" : "Base64 to decode…"}
+            className="flex-1 resize-none border-(--border)"
           />
-        </div>
+        </Flex>
 
-        <div className="flex min-h-0 flex-1 flex-col">
-          <span className="mb-1 text-xs font-semibold uppercase tracking-wider text-(--sidebar-fg)">
+        <Flex direction="col" className="min-h-0 flex-1">
+          <Typography
+            variant="span"
+            className="mb-1 text-xs font-semibold uppercase tracking-wider text-(--sidebar-fg)"
+          >
             Output
-          </span>
-          <textarea
-            value={vm.error ? "" : vm.output}
+          </Typography>
+          <Textarea
+            value={output}
             readOnly
             spellCheck={false}
             placeholder="Result…"
-            className="min-h-0 flex-1 resize-none rounded-md border border-(--border) bg-(--sidebar-bg) p-3 font-mono text-sm text-(--fg) outline-hidden"
+            className="flex-1 resize-none border-(--border) focus-visible:ring-0"
           />
-          {vm.error && (
-            <p className="mt-1 text-xs text-red-400" role="alert">
-              {vm.error.message}
-            </p>
+          {error && (
+            <Typography variant="span" as="p" className="mt-1 text-xs text-red-400" role="alert">
+              {error.message}
+            </Typography>
           )}
-        </div>
-      </div>
-    </div>
+        </Flex>
+      </Flex>
+    </Flex>
   );
 }

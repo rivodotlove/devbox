@@ -1,17 +1,20 @@
+import { Box, Flex } from "@/shared/ui";
+import { cn } from "@/shared/utils";
 import { useCallback, useRef, type ReactNode } from "react";
 import {
-  PanelGroup,
   Panel,
+  PanelGroup,
   PanelResizeHandle,
   type ImperativePanelHandle,
 } from "react-resizable-panels";
-import { cn } from "@/shared/utils";
-import { useShellStore } from "@/app/stores/use-shell-store";
+
+import { useShellStore } from "../stores/use-shell-store";
+
 import { CommandPalette } from "./command-palette";
 import { ShortcutsCheatsheet } from "./shortcuts-cheatsheet";
 import { Sidebar } from "./sidebar";
-import { TabBar } from "./tab-bar";
 import { StatusBar } from "./status-bar";
+import { TabBar } from "./tab-bar";
 import { useShellShortcuts } from "./use-shell-shortcuts";
 
 interface AppShellProps {
@@ -39,8 +42,8 @@ export function AppShell({ children }: AppShellProps) {
   useShellShortcuts({ toggleSidebar });
 
   return (
-    <div className="flex h-screen w-screen flex-col overflow-hidden">
-      <div className="flex flex-1 overflow-hidden">
+    <Flex direction="col" className="h-screen w-screen overflow-hidden">
+      <Flex className="flex-1 overflow-hidden">
         <PanelGroup direction="horizontal" autoSaveId="devbox:shell-h">
           <Panel
             ref={sidebarRef}
@@ -62,16 +65,16 @@ export function AppShell({ children }: AppShellProps) {
             )}
           />
           <Panel defaultSize={80}>
-            <div className="flex h-full flex-col">
+            <Flex direction="col" className="h-full">
               <TabBar sidebarCollapsed={sidebarCollapsed} onToggleSidebar={toggleSidebar} />
-              <div className="flex-1 overflow-auto">{children}</div>
-            </div>
+              <Box className="flex-1 overflow-auto">{children}</Box>
+            </Flex>
           </Panel>
         </PanelGroup>
-      </div>
+      </Flex>
       <StatusBar onShortcuts={openCheatsheet} />
       <CommandPalette open={paletteOpen} onClose={closePalette} />
       <ShortcutsCheatsheet open={cheatsheetOpen} onClose={closeCheatsheet} />
-    </div>
+    </Flex>
   );
 }
