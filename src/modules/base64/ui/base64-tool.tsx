@@ -1,4 +1,6 @@
-import { Box, Checkbox, Flex, Label, Textarea, Typography } from "@/shared/ui";
+import { useSettingsStore } from "@/app/stores/use-settings-store";
+import { detectLanguage } from "@/shared/lib/editor/detect-language";
+import { Box, Checkbox, CodeEditor, Flex, Label, Typography } from "@/shared/ui";
 
 import type { Base64Mode } from "../domain/base64";
 
@@ -12,6 +14,10 @@ const MODES: { id: Base64Mode; label: string }[] = [
 
 export default function Base64Tool() {
   const { mode, setMode, urlSafe, toggleUrlSafe, input, setInput, output, error } = useBase64();
+  const fontSize = useSettingsStore((s) => s.fontSize);
+  const tabSize = useSettingsStore((s) => s.tabSize);
+  const inputLang = detectLanguage(input);
+  const outputLang = mode === "decode" ? detectLanguage(output) : "text";
 
   return (
     <Flex direction="col" gap={3} className="h-full w-full p-4">
@@ -40,12 +46,15 @@ export default function Base64Tool() {
           >
             Input
           </Typography>
-          <Textarea
+          <CodeEditor
             value={input}
-            onChange={(e) => setInput(e.target.value)}
-            spellCheck={false}
+            onChange={setInput}
+            language={inputLang}
+            ariaLabel="Base64 input"
             placeholder={mode === "encode" ? "Text to encode…" : "Base64 to decode…"}
-            className="flex-1 resize-none border-border"
+            fontSize={fontSize}
+            tabSize={tabSize}
+            className="min-h-0 flex-1"
           />
         </Flex>
 
@@ -56,12 +65,15 @@ export default function Base64Tool() {
           >
             Output
           </Typography>
-          <Textarea
+          <CodeEditor
             value={output}
             readOnly
-            spellCheck={false}
+            language={outputLang}
+            ariaLabel="Base64 output"
             placeholder="Result…"
-            className="flex-1 resize-none border-border focus-visible:border-border focus-visible:ring-0"
+            fontSize={fontSize}
+            tabSize={tabSize}
+            className="min-h-0 flex-1"
           />
           {error && (
             <Typography variant="span" as="p" className="mt-1 text-xs text-red-400" role="alert">

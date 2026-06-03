@@ -23,6 +23,15 @@
   --border: oklch(0.2931 0 0);
   --input: oklch(0.2931 0 0);
   --ring: oklch(0.852 0.0205 100.6306);
+  /* CodeMirror syntax tokens — dark */
+  --cm-keyword: #ff7b72;
+  --cm-string: #a5d6ff;
+  --cm-number: #f2cc60;
+  --cm-atom: #79c0ff;
+  --cm-property: #79c0ff;
+  --cm-comment: #8b949e;
+  --cm-punctuation: #c9d1d9;
+  --cm-tag: #7ee787;
   --chart-1: oklch(0.6863 0.1743 34.2614);
   --chart-2: oklch(0.859 0.0209 74.6369);
   --chart-3: oklch(0.6348 0.0113 81.7875);
@@ -78,6 +87,15 @@
   --border: oklch(0.8434 0.0231 87.1621);
   --input: oklch(0.8434 0.0231 87.1621);
   --ring: oklch(0.3012 0 0);
+  /* CodeMirror syntax tokens — light */
+  --cm-keyword: #cf222e;
+  --cm-string: #0a3069;
+  --cm-number: #0550ae;
+  --cm-atom: #0550ae;
+  --cm-property: #0550ae;
+  --cm-comment: #6e7781;
+  --cm-punctuation: #24292f;
+  --cm-tag: #116329;
   --chart-1: oklch(0.6863 0.1743 34.2614);
   --chart-2: oklch(0.235 0 0);
   --chart-3: oklch(0.4688 0.0136 84.5932);

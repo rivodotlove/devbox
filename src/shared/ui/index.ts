@@ -1,6 +1,7 @@
 export * from "./box";
 export * from "./button";
 export * from "./checkbox";
+export * from "./code-editor";
 export * from "./collapsible";
 export * from "./command";
 export * from "./dialog";
