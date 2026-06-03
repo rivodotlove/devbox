@@ -33,6 +33,9 @@ src/routeTree.gen.ts
 # Playwright MCP artifacts
 .playwright-mcp/
 
+# Generated planning artifacts (write-plan output)
+.claude/plans/
+
 # Playwright e2e artifacts
 /test-results/
 /playwright-report/
