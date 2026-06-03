@@ -10,6 +10,7 @@
     "lint": "vp lint .",
     "typecheck": "tsc -b",
     "test": "vp test",
+    "test:e2e": "playwright test",
     "preview": "vp preview",
     "prepare": "vp config"
   },
@@ -35,6 +36,7 @@
     "zustand": "^5.0.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/vite": "^4.0.0",
     "@tanstack/router-cli": "^1.167.9",
     "@tanstack/router-devtools": "^1.97.0",

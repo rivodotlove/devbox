@@ -9,7 +9,11 @@ export default defineConfig({
   staged: {
     "*": "vp check --fix",
   },
-  fmt: {},
+  fmt: {
+    // Generated plan HTML and skill templates aren't source — Oxfmt mis-parses the
+    // JSX embedded in their <pre><code> blocks.
+    ignorePatterns: [".claude/plans/**"],
+  },
   lint: {
     options: { typeAware: true, typeCheck: true },
     // DDD-lite boundary rules. Modules are reachable only via their barrel.
