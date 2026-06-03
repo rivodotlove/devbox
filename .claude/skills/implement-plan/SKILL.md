@@ -58,24 +58,22 @@ Cover the module's user-facing behavior end-to-end (driving the real route, not 
 the pure domain). Specs live under `e2e/` (repo convention dir), named per module,
 e.g. `e2e/base64.e2e.ts`.
 
-- **If an e2e harness is configured** (an `e2e` / `test-e2e` task in `vite.config.ts`
-  `tasks`, a Vitest `browser` block, or a playwright config): add a new spec for a new
-  module, or extend the existing spec for changed behavior. Match the harness's
-  existing patterns. Assert the things the plan's acceptance criteria call out
-  (e.g. encode→decode round-trip, error state shows, persistence across reload).
-- **If no e2e harness exists yet** (current state of this repo — `e2e/` is empty, no
-  Playwright dep, no `browser` test config): do NOT silently invent config. Set up the
-  minimal harness via Vite+ (Vitest browser mode, run as a `vp run e2e` task wired in
-  `vite.config.ts`), then write the module spec — and call out in the report that you
-  added the harness. If setup is non-trivial or ambiguous, stop and ask before adding
-  dependencies.
+- **This repo uses Playwright** (`playwright.config.ts`, `testDir: "./e2e"`, `test:e2e`
+  script). Add a new `e2e/<module>.e2e.ts` spec, or extend the existing one for changed
+  behavior, following the precedent in `e2e/base64.e2e.ts`. Assert what the plan's
+  acceptance criteria call out (e.g. encode→decode round-trip, error state shows,
+  persistence across reload). Run with `pnpm exec playwright test` (or `vp run test:e2e`).
+- **Only if a future repo has no e2e harness at all**: do NOT silently invent config.
+  Set up a minimal harness (Playwright, or Vitest browser mode — match the project),
+  write the module spec, and call out in the report that you added the harness. If setup
+  is non-trivial or ambiguous, stop and ask before adding dependencies.
 - Keep e2e assertions behavioral and stable (roles/text/labels), not brittle DOM
   snapshots. Re-use existing unit tests for pure logic; e2e is for the wired-up flow.
 
 ### 6. Verify
 
-Run `vp check` (format, lint, type), `vp test`, and the e2e task if one exists
-(`vp run e2e` / `vp test --project e2e`, per how it's wired). Fix failures your changes
+Run `vp check` (format, lint, type), `vp test` (unit), and the e2e suite
+(`pnpm exec playwright test` / `vp run test:e2e`). Fix failures your changes
 caused. If a failure is pre-existing/unrelated, say so rather than chasing it. Quote
 real output — never claim green without running it.
 
