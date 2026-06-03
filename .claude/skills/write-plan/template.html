@@ -1,0 +1,330 @@
+<!--
+  write-plan template. Copy and fill. Replace every {{...}} placeholder.
+  Single self-contained file. Mermaid loaded from CDN.
+  Section 1 = human-readable (90% of user time). Section 2 = technical (agent).
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Plan — {{ISSUE_ID}} {{TITLE}}</title>
+    <style>
+      :root {
+        --bg: #1e1e1e;
+        --panel: #262626;
+        --border: #3a3a3a;
+        --fg: #e6edf3;
+        --muted: #9198a1;
+        --accent: #4493f8;
+        --add: #3fb950;
+        --warn: #d29922;
+        --bad: #f85149;
+        --mono: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
+        --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: var(--sans);
+        line-height: 1.6;
+      }
+      .wrap {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 0 24px 96px;
+      }
+      header.top {
+        padding: 32px 0 16px;
+        border-bottom: 1px solid var(--border);
+      }
+      header.top .id {
+        font-family: var(--mono);
+        color: var(--accent);
+        font-size: 14px;
+      }
+      header.top h1 {
+        margin: 6px 0 8px;
+        font-size: 28px;
+      }
+      header.top a {
+        color: var(--accent);
+        font-size: 14px;
+      }
+      nav.sticky {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        gap: 8px;
+        padding: 12px 0;
+      }
+      nav.sticky a {
+        text-decoration: none;
+        color: var(--muted);
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+      nav.sticky a:hover {
+        background: var(--panel);
+        color: var(--fg);
+      }
+      .section-label {
+        font-family: var(--mono);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 40px 0 4px;
+      }
+      h2 {
+        font-size: 22px;
+        margin: 4px 0 16px;
+      }
+      h3 {
+        font-size: 17px;
+        margin: 28px 0 10px;
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 18px 20px;
+        margin: 14px 0;
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      @media (max-width: 760px) {
+        .grid2 {
+          grid-template-columns: 1fr;
+        }
+      }
+      .compare-col h4 {
+        margin: 0 0 8px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .compare-col img {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        display: block;
+      }
+      .noshot {
+        color: var(--muted);
+        font-style: italic;
+        padding: 24px;
+        text-align: center;
+        border: 1px dashed var(--border);
+        border-radius: 8px;
+      }
+      .divider {
+        margin: 56px 0;
+        border: none;
+        border-top: 2px dashed var(--border);
+      }
+      .tech {
+        border-left: 3px solid var(--accent);
+        padding-left: 16px;
+      }
+      .consume-banner {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 8px 0 20px;
+        padding: 10px 14px;
+        border: 1px dashed var(--accent);
+        border-radius: 8px;
+        background: color-mix(in srgb, var(--accent) 10%, transparent);
+        font-size: 13px;
+      }
+      .consume-banner code {
+        color: var(--accent);
+      }
+      code,
+      pre {
+        font-family: var(--mono);
+        font-size: 13px;
+      }
+      pre {
+        background: #0a0d12;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 14px;
+        overflow: auto;
+      }
+      code:not(pre code) {
+        background: #0a0d12;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+      .task {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin: 14px 0;
+      }
+      .task .meta {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+      .task h3 {
+        margin-top: 0;
+      }
+      .files li {
+        font-family: var(--mono);
+        font-size: 13px;
+      }
+      .pill {
+        display: inline-block;
+        font-size: 11px;
+        font-family: var(--mono);
+        padding: 2px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        color: var(--muted);
+      }
+      .risk {
+        border-left: 3px solid var(--warn);
+      }
+      ul.acc {
+        margin: 8px 0;
+      }
+      ul.acc li::marker {
+        color: var(--add);
+      }
+      .mermaid {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px;
+        margin: 14px 0;
+      }
+      .review {
+        border-left: 3px solid var(--bad);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="top">
+        <div class="id">{{ISSUE_ID}}</div>
+        <h1>{{TITLE}}</h1>
+        <a href="{{ISSUE_URL}}" target="_blank" rel="noopener">View issue ↗</a>
+      </header>
+
+      <nav class="sticky">
+        <a href="#plan">📋 The Plan</a>
+        <a href="#implementation">⚙️ Implementation</a>
+      </nav>
+
+      <!-- ========================= SECTION 1: HUMAN ========================= -->
+      <div class="section-label">Section 1 · for everyone</div>
+      <h2 id="plan">The Plan</h2>
+
+      <div class="panel">
+        <p><strong>Summary.</strong> {{ONE_PARAGRAPH_SUMMARY}}</p>
+      </div>
+
+      <h3>The problem</h3>
+      <div class="panel"><p>{{PROBLEM_STATEMENT}}</p></div>
+
+      <h3>How it works today vs. proposed</h3>
+      <div class="grid2">
+        <div>
+          <h4 style="color: var(--muted)">Current</h4>
+          <div class="mermaid">{{MERMAID_CURRENT}}</div>
+        </div>
+        <div>
+          <h4 style="color: var(--muted)">Proposed</h4>
+          <div class="mermaid">{{MERMAID_PROPOSED}}</div>
+        </div>
+      </div>
+
+      <h3>What it looks like</h3>
+      <!-- If no UI: replace the grid with <div class="noshot">No current screenshot — {{REASON}}</div> -->
+      <div class="grid2">
+        <div class="compare-col">
+          <h4>Current</h4>
+          <img src="assets/{{CURRENT_SCREENSHOT}}" alt="Current UI" />
+        </div>
+        <div class="compare-col">
+          <h4>Proposed</h4>
+          <!-- annotated mockup, wireframe, or labelled description box -->
+          <img src="assets/{{PROPOSED_MOCKUP}}" alt="Proposed UI (mockup)" />
+        </div>
+      </div>
+
+      <h3>User-facing impact</h3>
+      <div class="panel"><p>{{IMPACT}}</p></div>
+
+      <h3>Risks &amp; open questions</h3>
+      <div class="panel risk"><p>{{RISKS}}</p></div>
+
+      <hr class="divider" />
+
+      <!-- ===================== SECTION 2: TECHNICAL ===================== -->
+      <!-- IMPLEMENT-PLAN:BEGIN — this section is consumed by the /implement-plan skill -->
+      <div class="section-label">Section 2 · for the implementing agent · skim only</div>
+      <h2 id="implementation" class="tech" data-implement-plan="tasks">Implementation</h2>
+      <div class="consume-banner">
+        🤖
+        <span
+          >This section is consumed by <code>/implement-plan</code> — the AI agent executes these
+          tasks in order. Humans only skim.</span
+        >
+      </div>
+
+      <!-- Repeat .task per task, in execution order -->
+      <div class="task">
+        <div class="meta">Task 1 · depends on: none · <span class="pill">{{AREA}}</span></div>
+        <h3>{{TASK_TITLE}}</h3>
+        <p>{{TASK_DESCRIPTION}}</p>
+        <strong>Files</strong>
+        <ul class="files">
+          <li>{{FILE_PATH}} — {{WHAT_CHANGES}}</li>
+        </ul>
+        <pre><code>{{CODE_SNIPPET}}</code></pre>
+        <strong>Acceptance</strong>
+        <ul class="acc">
+          <li>{{ACCEPTANCE_CRITERION}}</li>
+        </ul>
+      </div>
+
+      <h3>Verification</h3>
+      <div class="panel tech">
+        <p>{{TEST_PLAN}}</p>
+        <pre><code>vp check
+vp test</code></pre>
+      </div>
+
+      <!-- Reviewer fills this after the gap review (optional) -->
+      <div class="task review" id="review-notes" style="display:{{REVIEW_DISPLAY}}">
+        <div class="meta">Reviewer gaps · {{VERDICT}}</div>
+        <ul>
+          {{REVIEW_FINDINGS}}
+        </ul>
+      </div>
+      <!-- IMPLEMENT-PLAN:END -->
+    </div>
+
+    <script type="module">
+      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+      mermaid.initialize({ startOnLoad: true, theme: "dark" });
+    </script>
+  </body>
+</html>
