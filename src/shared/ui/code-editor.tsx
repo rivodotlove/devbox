@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import CodeMirror, { EditorView, type Extension } from "@uiw/react-codemirror";
+import CodeMirror, { EditorState, EditorView, type Extension } from "@uiw/react-codemirror";
 import { indentWithTab } from "@codemirror/commands";
 import { json } from "@codemirror/lang-json";
 import { xml } from "@codemirror/lang-xml";
@@ -88,17 +88,20 @@ export function CodeEditor({
   fontSize,
   tabSize,
 }: CodeEditorProps) {
+  // Guard against invalid persisted/user values (negative, 0, NaN) — repeat() throws.
+  const safeTabSize = Math.max(1, Math.floor(tabSize) || 2);
   const extensions = useMemo<Extension[]>(
     () => [
       appTheme,
       syntaxHighlighting(cmHighlight),
       EditorView.lineWrapping,
-      indentUnit.of(" ".repeat(tabSize)),
+      indentUnit.of(" ".repeat(safeTabSize)),
+      EditorState.tabSize.of(safeTabSize),
       keymap.of([indentWithTab]),
       EditorView.contentAttributes.of({ "aria-label": ariaLabel }),
       ...LANG_EXT[language],
     ],
-    [language, tabSize, ariaLabel],
+    [language, safeTabSize, ariaLabel],
   );
   const style = useMemo(() => ({ fontSize: `${fontSize}px` }), [fontSize]);
 
